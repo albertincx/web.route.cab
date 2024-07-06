@@ -20,6 +20,7 @@ const switchPoint = (point: any) => {
     let latA = coords[1];
     return [latA, longA];
 };
+// @ts-ignore
 const Map: FC = ({ record }) => {
     useEffect(() => {
         let fp = [51.505, -0.09];

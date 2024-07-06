@@ -25,7 +25,7 @@ const useScript = (startSrc, fn) => {
         newScript.setAttribute(i[0], i[1]);
     });
     fn?.()
-    document.querySelector('.tg-load').appendChild(newScript);
+    document.querySelector('.tg-load')?.appendChild(newScript);
 }
 
 if (window.Telegram && window.Telegram.WebApp) {
@@ -51,6 +51,7 @@ AuthApi.auth().then((e) => {
             // setLoading(true);
             console.log(user);
             try {
+                // @ts-ignore
                 await AuthApi.auth(user);
                 try {
                     // await login(

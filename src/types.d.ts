@@ -6,5 +6,7 @@ declare global {
     Telegram;
     isWsOk;
     bindMarkerRouteCab1;
+    onTelegramAuth;
+    L;
   }
 }

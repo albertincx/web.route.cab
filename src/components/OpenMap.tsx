@@ -43,6 +43,7 @@ const switchPoint = (point: any) => {
     let latA = coords[1];
     return [latA, longA];
 };
+// @ts-ignore
 const Map: FC = ({ record, setValue }) => {
     const el = document.head;
     useScript('https://unpkg.com/browse/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js', el, () => {
