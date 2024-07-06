@@ -30,14 +30,9 @@ class Auth {
 
         const data = {query};
         // @ts-ignore
-        const response = await (
+        await (
             await fetch(`${API_URL}${USER_API}/login`, requestParams(data, false))
         ).json();
-        this.accessToken = response?.token;
-        localStorage.setItem(this.localStorageKey, response.token || '');
-        if (!this.accessToken) {
-            throw 'no access';
-        }
     }
 }
 

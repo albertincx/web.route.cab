@@ -18,7 +18,7 @@ export const requestParams = (data: any = {}, putToken = true) => {
 
     if (putToken && AuthApi.accessToken) {
         // @ts-ignore
-        h['Authorization'] = `${AuthApi.accessToken}`
+        h['Authorization'] = `Bearer ${AuthApi.accessToken}`
     }
     opts.headers = h;
     if (Object.keys(data).length) {
