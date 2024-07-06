@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Map, Marker, ZoomControl } from 'pigeon-maps';
+import React, {useState} from 'react';
+import {Map, Marker, ZoomControl} from 'pigeon-maps';
 
 // Компонент MapSelector для выбора точки на карте
-const MapSelector: React.FC<any> = ({ onLocationSelect, initialLocation }) => {
+const MapSelector: React.FC<any> = ({onLocationSelect, initialLocation}) => {
     const [center, setCenter] = useState(initialLocation || [55.7558, 37.6173]);
     const [zoom, setZoom] = useState(10);
     const [marker, setMarker] = useState(initialLocation);
 
-    const handleClick = ({ latLng }) => {
+    const handleClick = ({latLng}) => {
         setMarker(latLng);
         onLocationSelect(latLng);
     };
@@ -17,20 +17,20 @@ const MapSelector: React.FC<any> = ({ onLocationSelect, initialLocation }) => {
             height={300}
             center={center}
             zoom={zoom}
-            onBoundsChanged={({ center, zoom }) => {
+            onBoundsChanged={({center, zoom}) => {
                 setCenter(center);
                 setZoom(zoom);
             }}
             onClick={handleClick}
         >
-            {marker && <Marker width={50} anchor={marker} />}
-            <ZoomControl />
+            {marker && <Marker width={50} anchor={marker}/>}
+            <ZoomControl/>
         </Map>
     );
 };
 
 // Обновленный компонент формы нового поста
-export const NewPostForm = ({ addPost, setCurrentPage }) => {
+export const NewPostForm = ({addPost, setCurrentPage}) => {
     const [imageUrl, setImageUrl] = useState('');
     const [caption, setCaption] = useState('');
     const [locationA, setLocationA] = useState('');
@@ -67,7 +67,7 @@ export const NewPostForm = ({ addPost, setCurrentPage }) => {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
-                    const { latitude, longitude } = position.coords;
+                    const {latitude, longitude} = position.coords;
                     try {
                         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
                         const data = await response.json();
@@ -104,28 +104,46 @@ export const NewPostForm = ({ addPost, setCurrentPage }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '20px'}}
+              className="max-w-[8rem] mx-auto">
             <input
                 type="text"
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
                 placeholder="Введите URL изображения"
-                style={{ padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb' }}
+                style={{padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb'}}
             />
             <textarea
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
                 placeholder="Напишите подпись..."
-                style={{ padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb', minHeight: '100px' }}
+                style={{padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb', minHeight: '100px'}}
             />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <div style={{ display: 'flex', gap: '10px' }}>
+            <label htmlFor="time" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Select time:
+            </label>
+            <div className="relative">
+                <input type="time" id="time"
+                       className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       min="09:00" max="18:00" value="00:00" required/>
+            </div>
+            <label htmlFor="time" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Select time:
+            </label>
+
+            <div className="relative">
+                <input type="time" id="time"
+                       className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       min="09:00" max="18:00" value="00:00" required/>
+            </div>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                <div style={{display: 'flex', gap: '10px'}}>
                     <input
                         type="text"
                         value={locationA}
                         onChange={(e) => setLocationA(e.target.value)}
                         placeholder="Точка А"
-                        style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb' }}
+                        style={{flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb'}}
                     />
                     <button
                         type="button"
@@ -157,14 +175,14 @@ export const NewPostForm = ({ addPost, setCurrentPage }) => {
                         🗺️
                     </button>
                 </div>
-                {showMapA && <MapSelector onLocationSelect={(latLng) => handleLocationSelect(latLng, setLocationA)} />}
-                <div style={{ display: 'flex', gap: '10px' }}>
+                {showMapA && <MapSelector onLocationSelect={(latLng) => handleLocationSelect(latLng, setLocationA)}/>}
+                <div style={{display: 'flex', gap: '10px'}}>
                     <input
                         type="text"
                         value={locationB}
                         onChange={(e) => setLocationB(e.target.value)}
                         placeholder="Точка Б"
-                        style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb' }}
+                        style={{flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb'}}
                     />
                     <button
                         type="button"
@@ -196,9 +214,9 @@ export const NewPostForm = ({ addPost, setCurrentPage }) => {
                         🗺️
                     </button>
                 </div>
-                {showMapB && <MapSelector onLocationSelect={(latLng) => handleLocationSelect(latLng, setLocationB)} />}
+                {showMapB && <MapSelector onLocationSelect={(latLng) => handleLocationSelect(latLng, setLocationB)}/>}
             </div>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p style={{color: 'red'}}>{error}</p>}
             <button
                 type="submit"
                 style={{
@@ -211,6 +229,20 @@ export const NewPostForm = ({ addPost, setCurrentPage }) => {
                 }}
             >
                 Опубликовать
+            </button>
+            <button
+                onClick={() => setCurrentPage('home')}
+                style={{
+                    padding: '10px',
+                    backgroundColor: '#0095f6',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                    marginTop: '20px'
+                }}
+            >
+                Вернуться на главную
             </button>
         </form>
     );

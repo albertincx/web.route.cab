@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {MapModal} from "./Map/MapModal";
 
-export const Post = ({ username, imageUrl, caption, isFavorite, location, onClick }) => {
+export const Post = ({name: username, imageUrl, caption, isFavorite, location, onClick}) => {
     const [isMapOpen, setIsMapOpen] = useState(false);
 
     return (
@@ -15,16 +15,15 @@ export const Post = ({ username, imageUrl, caption, isFavorite, location, onClic
             }}
             onClick={onClick}
         >
-            <div style={{ padding: '10px', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{padding: '10px', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between'}}>
                 <span>{username}</span>
                 {isFavorite && <span>⭐</span>}
             </div>
-            <img src={imageUrl} alt={`Пост от ${username}`} style={{ width: '100%', height: 'auto' }} />
-            <div style={{ padding: '10px' }}>
-                <strong>{username}</strong> {caption}
+            <div style={{padding: '10px'}}>
+                {/*<strong>{username}</strong>*/}
             </div>
             {location && (
-                <div style={{ padding: '0 10px 10px' }}>
+                <div style={{padding: '0 10px 10px'}}>
           <span style={{
               color: '#0095f6',
           }}>
@@ -32,7 +31,7 @@ export const Post = ({ username, imageUrl, caption, isFavorite, location, onClic
           </span>
                 </div>
             )}
-            <MapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} location={location} />
+            <MapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} location={location}/>
         </div>
     );
 };

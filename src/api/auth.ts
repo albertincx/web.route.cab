@@ -30,9 +30,12 @@ class Auth {
 
         const data = {query};
         // @ts-ignore
-        await (
-            await fetch(`${API_URL}${USER_API}/login`, requestParams(data, false))
-        ).json();
+        return fetch(`${API_URL}${USER_API}/login`, requestParams(data, false)).then(r => {
+            if (r.status === 403) {
+                throw 'unauth'
+            }
+            return r.json()
+        })
     }
 }
 

@@ -1,4 +1,4 @@
-import React, {lazy, useState} from 'react';
+import React, {lazy, Suspense, useState} from 'react';
 import {useStore} from "./store/base";
 import {Settings} from "./pages/Settings";
 import {Header} from "./components/Header";
@@ -14,6 +14,7 @@ import Storage from "./utils/storage";
 import i18n from "i18next";
 import index18 from "./i18n";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {LoaderPage} from "./pages/LoaderPage";
 
 const PageDetail = lazy(() => import("./pages/PostDetail"))
 const lang = Storage.get('lang');
@@ -95,7 +96,9 @@ const AppMain = () => {
                     <>
                         {/* @ts-ignore */}
                         <Header title={`Route ${selectedPost?.name || 'Noname'}`} setCurrentPage={setCurrentPage}/>
-                        <PageDetail post={selectedPost} setCurrentPage={setCurrentPage}/>
+                        <Suspense fallback={<LoaderPage/>}>
+                            <PageDetail post={selectedPost} setCurrentPage={setCurrentPage}/>
+                        </Suspense>
                     </>
                 );
             default:

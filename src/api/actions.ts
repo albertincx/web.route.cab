@@ -18,7 +18,7 @@ export const fetchAction = (url: string, params: IPostParam) => {
             r = await responseFetch(data);
         }
         if (r.status === 400) {
-            return {};
+            // return {};
         } else {
             if (params && params[API_REQUEST_PARAM]) {
                 fetchAction(ROUTES_API, {}).then(newData => {

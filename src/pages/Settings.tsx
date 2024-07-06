@@ -15,7 +15,6 @@ export const Settings = ({setCurrentPage}) => {
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
-            <h2>Настройки</h2>
             <div className="p-4 max-w-md mx-auto">
                 <h1 className="text-2xl font-bold mb-4">{t('welcome')}</h1>
                 <p className="mb-4">{t('currentLanguage')}: {currentLanguage}</p>

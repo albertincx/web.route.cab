@@ -52,14 +52,12 @@ const PostDetailPage = ({post: me, setCurrentPage}) => {
                 <div style={{fontWeight: 'bold', fontSize: '18px', marginBottom: '10px'}}>
                     {post.username}
                 </div>
-                <img src={post.imageUrl} alt={`Пост от ${post.username}`}
-                     style={{width: '100%', height: 'auto', marginBottom: '15px'}}/>
                 <div style={{marginBottom: '10px'}}>
-                    <strong>{post.username}</strong> {post.caption}
+                    <strong>{post.name}</strong> {post.caption}
                 </div>
-                <div style={{marginBottom: '15px'}}>
-                    📍 {post.location}
-                </div>
+                {/*<div style={{marginBottom: '15px'}}>*/}
+                {/*    📍 {post.location}*/}
+                {/*</div>*/}
                 <div style={{
                     backgroundColor: '#f0f0f0',
                     padding: '15px',
