@@ -69,15 +69,30 @@ AuthApi.auth().then((e) => {
                 <div className="loader-wrap welcome-loader">
                     <div>
                         <div>
-                            <a href="https://t.me/RouteCabBot/Routes">Open mini app 👉 <span className="text-gray-900">here</span></a>
+                            <a href="https://t.me/RouteCabBot/Routes">Open mini app 👉 <span
+                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">here</span></a>
                             <br/>
                             <br/>
                             <br/>
-                            <div>or login with telegram on website</div>
-                            <span>
-                                <a href="https://web.route.cab/"
-                                   className="text-gray-900 text-2xl">https://web.route.cab/</a>
-                            </span>
+
+
+                            <div id="toast-default"
+                                 className="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
+                                 role="alert">
+
+                                <div className="ms-3 text-sm font-normal">or login with telegram on website</div>
+                                <button type="button"
+                                        className="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+                                        data-dismiss-target="#toast-default" aria-label="Close">
+                                    <span className="sr-only">Close</span>
+
+                                </button>
+                            </div>
+                            <br/>
+                            <a href="https://web.route.cab/"
+                               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                web.route.cab
+                            </a>
                             <br/>
                             <br/>
                         </div>

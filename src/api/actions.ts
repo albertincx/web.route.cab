@@ -13,7 +13,6 @@ export const fetchAction = (url: string, params: IPostParam) => {
 
     return responseFetch(data).then(async r => {
         if (r.status === 401) {
-            AuthApi.accessToken = null;
             await AuthApi.auth();
             r = await responseFetch(data);
         }
