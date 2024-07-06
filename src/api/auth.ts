@@ -14,13 +14,18 @@ class Auth {
 
     async auth(user?): Promise<void> {
         if (this.accessToken) return;
-        let query = '';
+        let query: any = '';
         if (user) {
             //
         } else {
             // let initDataRaw
-            let {initDataRaw} = retrieveLaunchParams();
-            query = initDataRaw || window?.Telegram?.WebApp?.initData;
+            try {
+                let {initDataRaw} = retrieveLaunchParams();
+                query = initDataRaw
+            } catch (e) {
+                //
+            }
+            if (!query) query = window?.Telegram?.WebApp?.initData;
         }
         if (query) this.id = query
 

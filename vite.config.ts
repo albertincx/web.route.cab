@@ -1,7 +1,6 @@
 import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react'
 import {VitePWA} from 'vite-plugin-pwa'
-import fs from "node:fs/promises";
 
 const base: any = {};
 // @ts-ignore
@@ -29,15 +28,6 @@ export default defineConfig({
             },
             manifestFilename: 'manifest.json',
         }),
-        {
-            name: 'my-plugin-for-index-html-build-replacement',
-            transformIndexHtml: {
-                order: 'pre',
-                async handler() {
-                    return await fs.readFile('./dev.html', 'utf8')
-                },
-            },
-        },
     ],
     server: {
         fs: {
