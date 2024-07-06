@@ -35,7 +35,7 @@ if (isTgPlace) {
     Telegram.WebApp.expand();
 }
 
-AuthApi.auth().then((e) => {
+const authFetch = (u?) => AuthApi.auth(u).then((e) => {
     ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Suspense fallback={<LoaderPage/>}>
             {import.meta.env.DEV ? (
@@ -47,7 +47,9 @@ AuthApi.auth().then((e) => {
             )}
         </Suspense>
     )
-}).catch(() => {
+});
+
+authFetch().catch(() => {
     if (!window.onTelegramAuth) {
         // @ts-ignore
         window.onTelegramAuth = async user => {
@@ -55,8 +57,8 @@ AuthApi.auth().then((e) => {
             console.log(user);
             try {
                 // @ts-ignore
-                await AuthApi.auth(user);
-                location.reload();
+                await authFetch(user);
+                // location.reload();
             } catch (error) {
                 alert('Error');
             }
@@ -90,6 +92,7 @@ AuthApi.auth().then((e) => {
                             </div>
                             <br/>
                             <a href="https://web.route.cab/"
+                               target="_blank"
                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                 web.route.cab
                             </a>
