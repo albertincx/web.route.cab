@@ -13,6 +13,7 @@ class Auth {
     }
 
     async auth(user?): Promise<void> {
+        if (this.accessToken) return;
         let query = '';
         if (user) {
             //
@@ -22,8 +23,6 @@ class Auth {
             query = initDataRaw || window?.Telegram?.WebApp?.initData;
         }
         if (query) this.id = query
-
-        if (this.accessToken) return
 
         const data = {query, ...(user ? user : {})};
         // @ts-ignore
