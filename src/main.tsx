@@ -69,11 +69,17 @@ AuthApi.auth().then((e) => {
                 <div className="loader-wrap welcome-loader">
                     <div>
                         <div>
-                            <a href="https://t.me/RouteCabBot/Routes">Open mini app here</a>
+                            <a href="https://t.me/RouteCabBot/Routes">Open mini app 👉 <span className="text-gray-900">here</span></a>
                             <br/>
                             <br/>
                             <br/>
-                            <span>or login with telegram</span>
+                            <div>or login with telegram on website</div>
+                            <span>
+                                <a href="https://web.route.cab/"
+                                   className="text-gray-900 text-2xl">https://web.route.cab/</a>
+                            </span>
+                            <br/>
+                            <br/>
                         </div>
                         <div className="tg-load" style={{visibility: !isTgPlace ? 'visible' : 'hidden'}}></div>
                     </div>
