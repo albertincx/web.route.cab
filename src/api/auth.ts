@@ -13,6 +13,7 @@ class Auth {
     }
 
     async auth(user?): Promise<void> {
+        if (this.accessToken) return;
         let query: any = '';
         if (user) {
             //
