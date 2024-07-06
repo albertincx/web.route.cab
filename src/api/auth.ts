@@ -12,24 +12,23 @@ class Auth {
         this.accessToken = localStorage.getItem(this.localStorageKey);
     }
 
-    async auth(user?): Promise<void> {
+    async auth(): Promise<void> {
         if (this.accessToken) return;
         let query: any = '';
-        if (user) {
+        // let initDataRaw
+        try {
+            let {initDataRaw} = retrieveLaunchParams();
+            query = initDataRaw
+        } catch (e) {
             //
-        } else {
-            // let initDataRaw
-            try {
-                let {initDataRaw} = retrieveLaunchParams();
-                query = initDataRaw
-            } catch (e) {
-                //
-            }
-            if (!query) query = window?.Telegram?.WebApp?.initData;
         }
-        if (query) this.id = query
+        if (!query) query = window?.Telegram?.WebApp?.initData;
+        if (query) {
+            this.accessToken = query;
+            this.id = query
+        }
 
-        const data = {query, ...(user ? user : {})};
+        const data = {query};
         // @ts-ignore
         const response = await (
             await fetch(`${API_URL}${USER_API}/login`, requestParams(data, false))
