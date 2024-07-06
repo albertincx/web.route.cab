@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {lazy, useState} from 'react';
 import {useStore} from "./store/base";
 import {Settings} from "./pages/Settings";
 import {Header} from "./components/Header";
@@ -7,26 +7,15 @@ import {Profile} from "./pages/Profile";
 import {Routes} from "./pages/Routes";
 import withPagination from "./hooks/withPagination";
 import {ROUTES_API} from "./api/constants";
-import PostDetailPage from "./pages/PostDetail";
 import {NewPostForm} from "./components/NewForm";
 import {fetchAction} from "./api/actions";
 import {initReactI18next, useTranslation} from "react-i18next";
-// import {LoaderPage} from "./pages/LoaderPage";
 import Storage from "./utils/storage";
 import i18n from "i18next";
 import index18 from "./i18n";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-/*[
-        {
-            id: 1,
-            username: 'user1',
-            imageUrl: '/api/placeholder/400/400',
-            caption: 'Первый пост!',
-            location: 'Москва',
-            isFavorite: true
-        },
-    ]*/
-// Главный компонент приложения (обновлен)
+
+const PageDetail = lazy(() => import("./pages/PostDetail"))
 const lang = Storage.get('lang');
 // Initialize i18next
 i18n
@@ -106,7 +95,7 @@ const AppMain = () => {
                     <>
                         {/* @ts-ignore */}
                         <Header title={`Route ${selectedPost?.name || 'Noname'}`} setCurrentPage={setCurrentPage}/>
-                        <PostDetailPage post={selectedPost} setCurrentPage={setCurrentPage}/>
+                        <PageDetail post={selectedPost} setCurrentPage={setCurrentPage}/>
                     </>
                 );
             default:

@@ -20,7 +20,7 @@ body {
 }
 
 .loading {
-    background-image: url(login-bg.jpg);
+    background-image: url(../public/login-bg.jpg);
     background-repeat: no-repeat;
     background-position: center;
     background-color: #8e5954;

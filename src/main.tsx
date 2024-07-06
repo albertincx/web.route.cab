@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom/client'
 import './main.css'
 import {AuthApi} from "./api/auth";
 import {LoaderPage} from "./pages/LoaderPage";
+
 const ATTRS = [
     ['data-telegram-login', 'RouteCabBot'],
     ['data-size', 'large'],
@@ -14,24 +15,27 @@ const ATTRS = [
     ['data-onauth', 'onTelegramAuth(user)'],
     ['data-request-access', 'write'],
 ];
+
 const App = lazy(() => import('./App'));
-const useScript = (startSrc, fn) => {
+
+const useScript = (startSrc) => {
     const newScript = document.createElement('script');
     newScript.type = 'text/javascript';
     newScript.src = startSrc;
     newScript.async = true;
-    // newScript.onload = fn;
     ATTRS.map(i => {
         newScript.setAttribute(i[0], i[1]);
     });
-    fn?.()
     document.querySelector('.tg-load')?.appendChild(newScript);
 }
 
-if (window.Telegram && window.Telegram.WebApp) {
+const isTgPlace = window.Telegram && window.Telegram.WebApp;
+
+if (isTgPlace) {
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
 }
+
 AuthApi.auth().then((e) => {
     ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Suspense fallback={<LoaderPage/>}>
@@ -53,20 +57,9 @@ AuthApi.auth().then((e) => {
             try {
                 // @ts-ignore
                 await AuthApi.auth(user);
-                try {
-                    // await login(
-                    //     user,
-                    //     location.state
-                    //         ? (location.state as any).nextPathname
-                    //         : '/'
-                    // );
-                    console.log('SET');
-                    localStorage.setItem('cabtguid', user.id);
-                } catch (e) {
-                    //
-                }
+                location.reload();
             } catch (error) {
-                //
+                alert('Error');
             }
         };
     }
@@ -75,16 +68,21 @@ AuthApi.auth().then((e) => {
         <>
             <div className="loading">
                 <div className="loader-wrap welcome-loader">
-                    <div className="tg-load" style={{visibility: 'hidden'}}>
-
+                    <div>
+                        <div>
+                            <a href="https://t.me/RouteCabBot/Routes">Open mini app here</a>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <span>or login with telegram</span>
+                        </div>
+                        <div className="tg-load" style={{visibility: !isTgPlace ? 'visible' : 'hidden'}}></div>
                     </div>
                 </div>
             </div>
         </>
     )
     setTimeout(() => {
-        useScript('https://telegram.org/js/telegram-widget.js?21', () => {
-            // @ts-ignore
-        });
+        useScript('https://telegram.org/js/telegram-widget.js?21');
     }, 100)
 });

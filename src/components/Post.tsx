@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {MapModal} from "./MapModal";
+import {MapModal} from "./Map/MapModal";
 
 export const Post = ({ username, imageUrl, caption, isFavorite, location, onClick }) => {
     const [isMapOpen, setIsMapOpen] = useState(false);

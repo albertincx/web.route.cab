@@ -3,7 +3,7 @@ import {Map, Marker, Point, ZoomControl} from 'pigeon-maps';
 import {osm} from 'pigeon-maps/providers';
 import {fetchAction} from "../api/actions";
 import {ROUTES_API} from "../api/constants";
-import LMap from "../components/LMap";
+import LMap from "../components/Map/LMap";
 
 const PostDetailPage = ({post: me, setCurrentPage}) => {
     const [startPoint, setStartPoint] = useState([55.7558, 37.6173]); // Москва
