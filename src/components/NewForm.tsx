@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Map, Marker, ZoomControl} from 'pigeon-maps';
+import {useTranslation} from "react-i18next";
 
-// Компонент MapSelector для выбора точки на карте
 const MapSelector: React.FC<any> = ({onLocationSelect, initialLocation}) => {
     const [center, setCenter] = useState(initialLocation || [55.7558, 37.6173]);
     const [zoom, setZoom] = useState(10);
@@ -31,14 +31,22 @@ const MapSelector: React.FC<any> = ({onLocationSelect, initialLocation}) => {
 
 // Обновленный компонент формы нового поста
 export const NewPostForm = ({addPost, setCurrentPage}) => {
-    const [imageUrl, setImageUrl] = useState('');
-    const [caption, setCaption] = useState('');
+    const {t} = useTranslation();
+
     const [locationA, setLocationA] = useState('');
     const [locationB, setLocationB] = useState('');
     const [showMapA, setShowMapA] = useState(false);
     const [showMapB, setShowMapB] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [form, setForm] = useState<any>({});
+
+    const setField = name => (e) => {
+        setForm(old => ({
+            ...old,
+            [name]: e.target.value,
+        }))
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -47,15 +55,9 @@ export const NewPostForm = ({addPost, setCurrentPage}) => {
             return;
         }
         addPost({
-            id: Date.now(),
-            username: 'Иван Иванов',
-            imageUrl,
-            name: caption,
+            ...form,
             pointA: locationA,
             pointB: locationB,
-            hourA: 1,
-            hourB: 2,
-            // isFavorite: false
         });
         setCurrentPage('home');
     };
@@ -104,37 +106,58 @@ export const NewPostForm = ({addPost, setCurrentPage}) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '20px'}}
-              className="max-w-[8rem] mx-auto">
+        <form
+            onSubmit={handleSubmit}
+            style={{display: 'flex', flexDirection: 'column', gap: '20px'}}
+            className="max-w-[8rem] mx-auto"
+        >
             <input
                 type="text"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="Введите URL изображения"
+                value={form.name || ''}
+                defaultValue={""}
+                onChange={setField('name')}
+                placeholder={t('Route name')}
                 style={{padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb'}}
+                required
             />
-            <textarea
-                value={caption}
-                onChange={(e) => setCaption(e.target.value)}
-                placeholder="Напишите подпись..."
-                style={{padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb', minHeight: '100px'}}
-            />
+            {/*<textarea*/}
+            {/*    value={caption}*/}
+            {/*    onChange={(e) => setCaption(e.target.value)}*/}
+            {/*    placeholder="Напишите подпись..."*/}
+            {/*    style={{padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb', minHeight: '100px'}}*/}
+            {/*/>*/}
             <label htmlFor="time" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Select time:
+                {t('Select time from A to B')}:
             </label>
             <div className="relative">
-                <input type="time" id="time"
-                       className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       min="09:00" max="18:00" value="00:00" required/>
+                <input
+                    type="time"
+                    id="timeA"
+                    className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    min="09:00"
+                    max="18:00"
+                    defaultValue={"00:00"}
+                    value={form.hourA || "00:00"}
+                    onChange={setField('hourA')}
+                    required
+                />
             </div>
             <label htmlFor="time" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Select time:
+                {t('Select time from B to A')}:
             </label>
 
             <div className="relative">
-                <input type="time" id="time"
-                       className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       min="09:00" max="18:00" value="00:00" required/>
+                <input
+                    type="time"
+                    id="timeB"
+                    className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    min="09:00"
+                    max="18:00"
+                    defaultValue={"00:00"}
+                    value={form.hourB || "00:00"}
+                    onChange={setField('hourB')}
+                    required
+                />
             </div>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
                 <div style={{display: 'flex', gap: '10px'}}>
@@ -230,20 +253,20 @@ export const NewPostForm = ({addPost, setCurrentPage}) => {
             >
                 Опубликовать
             </button>
-            <button
-                onClick={() => setCurrentPage('home')}
-                style={{
-                    padding: '10px',
-                    backgroundColor: '#0095f6',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    marginTop: '20px'
-                }}
-            >
-                Вернуться на главную
-            </button>
+            {/*<button*/}
+            {/*    onClick={() => setCurrentPage('home')}*/}
+            {/*    style={{*/}
+            {/*        padding: '10px',*/}
+            {/*        backgroundColor: '#0095f6',*/}
+            {/*        color: 'white',*/}
+            {/*        border: 'none',*/}
+            {/*        borderRadius: '5px',*/}
+            {/*        cursor: 'pointer',*/}
+            {/*        marginTop: '20px'*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    Вернуться на главную*/}
+            {/*</button>*/}
         </form>
     );
 };

@@ -39,72 +39,72 @@ export const Settings = ({setCurrentPage}) => {
                     </button>
                 </div>
             </div>
-            <div>
-                <h3>Аккаунт</h3>
-                <button style={{
-                    padding: '10px',
-                    backgroundColor: '#f0f0f0',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    width: '100%',
-                    textAlign: 'left'
-                }}>
-                    Редактировать профиль
-                </button>
-                <button style={{
-                    padding: '10px',
-                    backgroundColor: '#f0f0f0',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    width: '100%',
-                    textAlign: 'left',
-                    marginTop: '10px'
-                }}>
-                    Изменить пароль
-                </button>
-            </div>
-            <div>
-                <h3>Предпочтения</h3>
-                <button style={{
-                    padding: '10px',
-                    backgroundColor: '#f0f0f0',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    width: '100%',
-                    textAlign: 'left'
-                }}>
-                    Уведомления
-                </button>
-                <button style={{
-                    padding: '10px',
-                    backgroundColor: '#f0f0f0',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    width: '100%',
-                    textAlign: 'left',
-                    marginTop: '10px'
-                }}>
-                    Конфиденциальность
-                </button>
-            </div>
-            <button
-                onClick={() => setCurrentPage('home')}
-                style={{
-                    padding: '10px',
-                    backgroundColor: '#0095f6',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    marginTop: '20px'
-                }}
-            >
-                Вернуться на главную
-            </button>
+            {/*<div>*/}
+            {/*    <h3>Аккаунт</h3>*/}
+            {/*    <button style={{*/}
+            {/*        padding: '10px',*/}
+            {/*        backgroundColor: '#f0f0f0',*/}
+            {/*        border: 'none',*/}
+            {/*        borderRadius: '5px',*/}
+            {/*        cursor: 'pointer',*/}
+            {/*        width: '100%',*/}
+            {/*        textAlign: 'left'*/}
+            {/*    }}>*/}
+            {/*        Редактировать профиль*/}
+            {/*    </button>*/}
+            {/*    <button style={{*/}
+            {/*        padding: '10px',*/}
+            {/*        backgroundColor: '#f0f0f0',*/}
+            {/*        border: 'none',*/}
+            {/*        borderRadius: '5px',*/}
+            {/*        cursor: 'pointer',*/}
+            {/*        width: '100%',*/}
+            {/*        textAlign: 'left',*/}
+            {/*        marginTop: '10px'*/}
+            {/*    }}>*/}
+            {/*        Изменить пароль*/}
+            {/*    </button>*/}
+            {/*</div>*/}
+            {/*<div>*/}
+            {/*    <h3>Предпочтения</h3>*/}
+            {/*    <button style={{*/}
+            {/*        padding: '10px',*/}
+            {/*        backgroundColor: '#f0f0f0',*/}
+            {/*        border: 'none',*/}
+            {/*        borderRadius: '5px',*/}
+            {/*        cursor: 'pointer',*/}
+            {/*        width: '100%',*/}
+            {/*        textAlign: 'left'*/}
+            {/*    }}>*/}
+            {/*        Уведомления*/}
+            {/*    </button>*/}
+            {/*    <button style={{*/}
+            {/*        padding: '10px',*/}
+            {/*        backgroundColor: '#f0f0f0',*/}
+            {/*        border: 'none',*/}
+            {/*        borderRadius: '5px',*/}
+            {/*        cursor: 'pointer',*/}
+            {/*        width: '100%',*/}
+            {/*        textAlign: 'left',*/}
+            {/*        marginTop: '10px'*/}
+            {/*    }}>*/}
+            {/*        Конфиденциальность*/}
+            {/*    </button>*/}
+            {/*</div>*/}
+            {/*<button*/}
+            {/*    onClick={() => setCurrentPage('home')}*/}
+            {/*    style={{*/}
+            {/*        padding: '10px',*/}
+            {/*        backgroundColor: '#0095f6',*/}
+            {/*        color: 'white',*/}
+            {/*        border: 'none',*/}
+            {/*        borderRadius: '5px',*/}
+            {/*        cursor: 'pointer',*/}
+            {/*        marginTop: '20px'*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    Вернуться на главную*/}
+            {/*</button>*/}
         </div>
     );
 };

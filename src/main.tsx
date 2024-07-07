@@ -42,7 +42,6 @@ const authFetch = () => AuthApi.auth().then((e) => {
 });
 
 authFetch().catch((e) => {
-    console.log(e);
     ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <>
             <div className="loading">
@@ -52,7 +51,7 @@ authFetch().catch((e) => {
                             <div
                                 className="p-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300"
                                 role="alert">
-                                <span className="font-medium"></span> Soon, stay tuned add me <a href="https://t.me/routecabbot">https://t.me/routecabbot</a>
+                                <span className="font-medium"></span> Soon, stay tuned add me <a href="https://t.me/routeCabBot">t.me/routeCabBot</a>
                             </div>
                         </div>
                     </div>

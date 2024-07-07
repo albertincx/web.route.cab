@@ -86,3 +86,31 @@ export const getQuery = (data: any) => {
     const query = new URLSearchParams(data).toString()
     return (query ? `?${query}` : '')
 }
+
+
+export const parseUserFromUrl = (initDataRaw) => {
+    let spl: any = '#' + btoa('¶\x05\x9El\ni\r«Z') + '=';
+    spl = location.hash && location.hash.split(spl);
+    console.log(initDataRaw);
+    if (!spl || !spl[1]) return
+
+    const str: any = spl && decodeURIComponent(spl[1])
+    if (!str) return
+
+    const obj: any = str.split("&").reduce((prev: any, curr: any) => {
+        let p: any = curr.split("=");
+        prev[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
+        return prev;
+    }, {});
+
+    if (obj.user) {
+        try {
+            obj.user = JSON.parse(obj.user);
+        } catch {
+            //
+        }
+    }
+    const tg = window?.Telegram?.WebApp;
+
+    return tg?.initDataUnsafe?.user || obj.user;
+}
