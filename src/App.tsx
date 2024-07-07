@@ -5,10 +5,7 @@ import {Header} from "./components/Header";
 import {BottomMenu} from "./components/Bottom";
 import {Profile} from "./pages/Profile";
 import {Routes} from "./pages/Routes";
-import withPagination from "./hooks/withPagination";
-import {ROUTES_API} from "./api/constants";
 import {NewPostForm} from "./components/NewForm";
-import {fetchAction} from "./api/actions";
 import {initReactI18next, useTranslation} from "react-i18next";
 import Storage from "./utils/storage";
 import i18n from "i18next";
@@ -29,35 +26,30 @@ i18n
             escapeValue: false,
         },
     });
+
 const AppMain = () => {
     const [currentPage, setCurrentPage] = useState('home');
     const [selectedPost, setSelectedPost] = useState(null);
     const {data} = useStore();
     const {t} = useTranslation();
 
-    // const [posts, setPosts] = useState([]);
-    const {data: posts} = withPagination(ROUTES_API)
     // console.log(data.successMessage);
     if (data.successMessage) {
         return null;
     }
-    const addPost = (newPost) => {
-        // setPosts([newPost, ...posts]);
-        fetchAction(ROUTES_API, {
-            data: newPost,
-        })
-    };
+
     const handlePostClick = (post) => {
         setSelectedPost(post);
         setCurrentPage('postDetail');
     };
+
     const renderContent = () => {
         switch (currentPage) {
             case 'home':
                 return (
                     <>
                         <Header title="Route cab" setCurrentPage={setCurrentPage}/>
-                        <Routes data={posts} onClick={handlePostClick}/>
+                        <Routes onClick={handlePostClick}/>
                         {/*<LoaderPage />*/}
                     </>
                 );
@@ -74,7 +66,7 @@ const AppMain = () => {
                 return (
                     <>
                         <Header title="Create new route" setCurrentPage={setCurrentPage}/>
-                        <NewPostForm addPost={addPost} setCurrentPage={setCurrentPage}/>
+                        <NewPostForm setCurrentPage={setCurrentPage}/>
                     </>
                 );
             case 'profile':
@@ -126,4 +118,5 @@ const App = () => (
         <AppMain/>
     </QueryClientProvider>
 )
+
 export default App;

@@ -88,7 +88,7 @@ export const getQuery = (data: any) => {
 }
 
 
-export const parseUserFromUrl = (initDataRaw) => {
+export const parseUserFromUrl = (initDataRaw?) => {
     let spl: any = '#' + btoa('¶\x05\x9El\ni\r«Z') + '=';
     spl = location.hash && location.hash.split(spl);
     console.log(initDataRaw);
@@ -112,5 +112,5 @@ export const parseUserFromUrl = (initDataRaw) => {
     }
     const tg = window?.Telegram?.WebApp;
 
-    return tg?.initDataUnsafe?.user || obj.user;
+    return tg?.initDataUnsafe?.user || obj.user || {};
 }

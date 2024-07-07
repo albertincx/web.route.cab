@@ -3,10 +3,12 @@ import {useInView} from "react-intersection-observer";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {fetchAction} from "../api/actions";
 
+const pageSize = 10;
+
 function withPagination<T>(url: any, activeTab?: any) {
     const queryClient = useQueryClient();
 
-    const [page, setPage] = useState<number>(1);
+    const [page, setPage] = useState<number>(0);
     const [allData, setAllData] = useState<any[]>([]);
     const {ref, inView} = useInView({threshold: 1});
     // const placeholderData = useMemo(() => {
@@ -43,45 +45,37 @@ function withPagination<T>(url: any, activeTab?: any) {
     const {data: Result, isLoading: loading, error} = useQuery({
         queryKey: [url, activeTab, page],
         queryFn: () => fetchAction(url, {
-            query: {page},
+            query: {page, range: `[${page * pageSize},${pageSize}]`},
+            range: 'Content-Range',
         }),
         retry: 1,
         // placeholderData: placeholderData,
     });
-
+    // console.log(Result);
     let data = Array.isArray(Result) ? Result : Result?.data || [];
 
-    // only achievements
-    if (Result?.check_in) {
-        data = Result.check_in;
-    }
-    const pageSize = Result?.pageSize || 0;
-    // console.log(url, allData, pageSize, data);
+    // console.log(url, allData, pageSize, data, page);
+    const dataLength = data?.length;
 
     useEffect(() => {
-        if (data) {
-            if (Array.isArray(data) && data.length) {
-                setAllData(prevData => {
-                    return [...prevData, ...data]
-                });
-            } else if (data.days) {
-                // set achievements
-                setAllData(data)
-            }
+        if (dataLength) {
+            setAllData(prevData => {
+                return [...prevData, ...data]
+            });
         }
-    }, [data]);
+    }, [dataLength]);
 
     useEffect(() => {
-        if (inView && !loading && data?.length === pageSize) {
+        if (inView && !loading && dataLength === pageSize) {
             setPage(prevPage => prevPage + 1);
         }
-    }, [inView, loading, data]);
+    }, [inView, loading, dataLength]);
 
     const resetQuery = () => queryClient.clear();
 
     return {
         data: allData,
-        dataLength: data?.length,
+        dataLength,
         loading,
         ref,
         setPage,

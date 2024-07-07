@@ -2,17 +2,22 @@ import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import i18n from "i18next";
 import Storage from "../utils/storage";
+import {fetchAction} from "../api/actions";
+import {RESTART_API} from "../api/constants";
+import {parseUserFromUrl} from "../utils/commonUtils";
 
 export const Settings = ({setCurrentPage}) => {
     const {t} = useTranslation();
     const [currentLanguage, setCurrentLanguage] = useState('en');
-
+    const uId = parseUserFromUrl().id;
     const changeLanguage = (lng) => {
         i18n.changeLanguage(lng);
         setCurrentLanguage(lng);
         Storage.set('lang', lng);
     };
-
+    const handleRestart = () => {
+        fetchAction(RESTART_API);
+    };
     return (
         <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
             <div className="p-4 max-w-md mx-auto">
@@ -91,20 +96,22 @@ export const Settings = ({setCurrentPage}) => {
             {/*        Конфиденциальность*/}
             {/*    </button>*/}
             {/*</div>*/}
-            {/*<button*/}
-            {/*    onClick={() => setCurrentPage('home')}*/}
-            {/*    style={{*/}
-            {/*        padding: '10px',*/}
-            {/*        backgroundColor: '#0095f6',*/}
-            {/*        color: 'white',*/}
-            {/*        border: 'none',*/}
-            {/*        borderRadius: '5px',*/}
-            {/*        cursor: 'pointer',*/}
-            {/*        marginTop: '20px'*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    Вернуться на главную*/}
-            {/*</button>*/}
+            {uId === 36058859 && (
+                <button
+                    onClick={handleRestart}
+                    style={{
+                        padding: '10px',
+                        backgroundColor: '#0095f6',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        marginTop: '20px'
+                    }}
+                >
+                    restart
+                </button>
+            )}
         </div>
     );
 };

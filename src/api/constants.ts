@@ -12,4 +12,7 @@ export const USER_API = '/users';
 export const ROUTES_API = '/routes';
 
 // tools
+export const RESTART_API = '/restart/1';
 export const API_REQUEST_PARAM = 'apiRequest';
+
+export const DEFAULT_POINT = [0, 0]
