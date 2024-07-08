@@ -8,8 +8,12 @@ import {MapModal} from "../components/Map/MapModal";
 import {NewPostForm} from "../components/NewForm";
 import {LoaderPage} from "./LoaderPage";
 import {Pages} from "../utils/constants";
+import MapRouteModal from "../components/Map/MapRoute";
+import {useTranslation} from "react-i18next";
 
 const PostDetailPage = ({post: me, setCurrentPage}) => {
+    const {t} = useTranslation();
+
     const [startPoint, setStartPoint] = useState([55.7558, 37.6173]); // Москва
     const [endPoint, setEndPoint] = useState([59.9311, 30.3609]); // Санкт-Петербург
     const [departureTime, setDepartureTime] = useState("2023-07-05T10:00");
@@ -22,7 +26,6 @@ const PostDetailPage = ({post: me, setCurrentPage}) => {
         fetchAction(ROUTES_API + `/${me._id}`, {
             // query: me._id,
         }).then(p => {
-            // console.log(p);
             setPost(p);
         });
     }, []);
@@ -40,7 +43,7 @@ const PostDetailPage = ({post: me, setCurrentPage}) => {
     }
     return (
         <div>
-            {!!post && <NewPostForm post={post} setCurrentPage={() => setCurrentPage(Pages.HOME)} />}
+            {/*{!!post && <NewPostForm post={post} setCurrentPage={() => setCurrentPage(Pages.HOME)} />}*/}
             <div style={{
                 backgroundColor: '#fff',
                 border: '1px solid #dbdbdb',
@@ -74,18 +77,18 @@ const PostDetailPage = ({post: me, setCurrentPage}) => {
                 </div>
             </div>
             <div style={{height: 'auto', marginBottom: '20px'}}>
-                <Map
-                    provider={osm}
-                    dprs={[1, 2]}
-                    center={[(startPoint[0] + endPoint[0]) / 2, (startPoint[1] + endPoint[1]) / 2]}
-                    zoom={6}
-                    height={400}
-                >
-                    <ZoomControl/>
-                    <Marker width={50} anchor={startPoint as Point}/>
-                    <Marker width={50} anchor={endPoint as Point}/>
-                </Map>
-                <LMap record={{}} setValue={setValue}/>
+                {/*<Map*/}
+                {/*    provider={osm}*/}
+                {/*    dprs={[1, 2]}*/}
+                {/*    center={[(startPoint[0] + endPoint[0]) / 2, (startPoint[1] + endPoint[1]) / 2]}*/}
+                {/*    zoom={6}*/}
+                {/*    height={400}*/}
+                {/*>*/}
+                {/*    <ZoomControl/>*/}
+                {/*    <Marker width={50} anchor={startPoint as Point}/>*/}
+                {/*    <Marker width={50} anchor={endPoint as Point}/>*/}
+                {/*</Map>*/}
+                {/*<LMap record={{}} setValue={setValue}/>*/}
             </div>
             <div>
                 <h3>Маршрут</h3>
@@ -96,10 +99,15 @@ const PostDetailPage = ({post: me, setCurrentPage}) => {
             <br/>
             <br/>
             <br/>
-            <MapModal
-                isOpen={isMapOpen}
-                onClose={() => setIsMapOpen(false)}
-                location=""
+            {/*<MapModal*/}
+            {/*    isOpen={isMapOpen}*/}
+            {/*    onClose={() => setIsMapOpen(false)}*/}
+            {/*    location=""*/}
+            {/*/>*/}
+            <MapRouteModal
+                A={post.pointA.coordinates}
+                B={post.pointB.coordinates}
+                title={t('Show route')}
             />
         </div>
     );

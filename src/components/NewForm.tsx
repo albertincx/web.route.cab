@@ -6,6 +6,9 @@ import {DEFAULT_POINT, ROUTES_API} from "../api/constants";
 import {fetchAction} from "../api/actions";
 import {Dialog} from "./Map/Dialog";
 import {Fields} from "../utils/constants";
+import MapSelect from "./Map/MapSelect";
+import MapRouteModal from "./Map/MapRoute";
+import {isPromise} from "../utils/commonUtils";
 
 const MapSelector: React.FC<any> = ({onLocationSelect, initialLocation}) => {
     const [center, setCenter] = useState(initialLocation || [55.7558, 37.6173]);
@@ -14,7 +17,6 @@ const MapSelector: React.FC<any> = ({onLocationSelect, initialLocation}) => {
 
     const handleClick = ({latLng}) => {
         setMarker(latLng);
-        // console.log(latLng);
         onLocationSelect(latLng);
     };
 
@@ -42,10 +44,12 @@ const initialForm: IRoute = {
     hourA: '00:00',
     hourB: '00:00',
 }
+
 interface IForm {
     post?: any;
     setCurrentPage: any;
 }
+
 // Обновленный компонент формы нового поста
 export const NewPostForm: React.FC<IForm> = ({setCurrentPage, post}) => {
     const {t} = useTranslation();
@@ -77,6 +81,7 @@ export const NewPostForm: React.FC<IForm> = ({setCurrentPage, post}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // console.log(form);
         if (!locationA && !locationB) {
             setError("Пожалуйста, укажите обе точки (А и Б)");
             return;
@@ -90,12 +95,14 @@ export const NewPostForm: React.FC<IForm> = ({setCurrentPage, post}) => {
                 ...form,
             },
         }).then((e) => {
-            // console.log(e);
+            console.log(e);
             if (!e.success && !e.id) {
                 setError(e.message);
             } else {
                 setCurrentPage();
             }
+        }).catch(e => {
+            isPromise(e) && e.then((err) => setError(err.message));
         })
     };
     const handleCloseModal = (isOk = false) => {
@@ -118,9 +125,9 @@ export const NewPostForm: React.FC<IForm> = ({setCurrentPage, post}) => {
                 async (position) => {
                     const {latitude, longitude} = position.coords;
                     try {
-                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-                        const data = await response.json();
-                        setLocation(data.display_name);
+                        // const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+                        // const data = await response.json();
+                        // setLocation(data.display_name);
                         setField(fieldName)({target: {value: [latitude, longitude]}});
                     } catch (err) {
                         setError("Не удалось получить название местоположения");
@@ -151,9 +158,9 @@ export const NewPostForm: React.FC<IForm> = ({setCurrentPage, post}) => {
             return;
         }
         try {
-            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latLng[0]}&lon=${latLng[1]}`);
-            const data = await response.json();
-            setLocation(data.display_name);
+            // const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latLng[0]}&lon=${latLng[1]}`);
+            // const data = await response.json();
+            setLocation('data.display_name');
             setField(fieldName)({target: {value: latLng}})
         } catch (err) {
             setError("Не удалось получить название местоположения");
@@ -275,23 +282,28 @@ export const NewPostForm: React.FC<IForm> = ({setCurrentPage, post}) => {
                         >
                             {isLoading ? 'Загрузка...' : '📍'}
                         </button>
-                        <button
+                        {/*<button*/}
+                        {/*    className={btnClass}*/}
+                        {/*    type="button"*/}
+                        {/*    onClick={() => setShowMapA(!showMapA)}*/}
+                        {/*    style={{*/}
+                        {/*        // padding: '10px',*/}
+                        {/*        // backgroundColor: '#0095f6',*/}
+                        {/*        // color: 'white',*/}
+                        {/*        // border: 'none',*/}
+                        {/*        // borderRadius: '5px',*/}
+                        {/*        // cursor: 'pointer'*/}
+                        {/*    }}*/}
+                        {/*>*/}
+                        {/*    🗺️*/}
+                        {/*</button>*/}
+                        <MapSelect
+                            title={t('Select A point')}
+                            onSelect={(l) => handleLocationSelect(l, setLocationA, Fields.POINT_A)}
                             className={btnClass}
-                            type="button"
-                            onClick={() => setShowMapA(!showMapA)}
-                            style={{
-                                // padding: '10px',
-                                // backgroundColor: '#0095f6',
-                                // color: 'white',
-                                // border: 'none',
-                                // borderRadius: '5px',
-                                // cursor: 'pointer'
-                            }}
-                        >
-                            🗺️
-                        </button>
+                        />
                     </div>
-                    {showPointA()}
+                    {/*{showPointA()}*/}
                     <div style={{display: 'flex', gap: '10px'}}>
                         {/*<input*/}
                         {/*    type="text"*/}
@@ -316,23 +328,29 @@ export const NewPostForm: React.FC<IForm> = ({setCurrentPage, post}) => {
                         >
                             {isLoading ? 'Загрузка...' : '📍'}
                         </button>
-                        <button
+                        <MapSelect
+                            title={t('Select B point')}
+                            onSelect={(l) => handleLocationSelect(l, setLocationB, Fields.POINT_B)}
                             className={btnClass}
-                            type="button"
-                            onClick={() => setShowMapB(!showMapB)}
-                            style={{
-                                // padding: '10px',
-                                // backgroundColor: '#0095f6',
-                                // color: 'white',
-                                // border: 'none',
-                                // borderRadius: '5px',
-                                // cursor: 'pointer'
-                            }}
-                        >
-                            🗺️
-                        </button>
+                        />
+
+                        {/*<button*/}
+                        {/*    className={btnClass}*/}
+                        {/*    type="button"*/}
+                        {/*    onClick={() => setShowMapB(!showMapB)}*/}
+                        {/*    style={{*/}
+                        {/*        // padding: '10px',*/}
+                        {/*        // backgroundColor: '#0095f6',*/}
+                        {/*        // color: 'white',*/}
+                        {/*        // border: 'none',*/}
+                        {/*        // borderRadius: '5px',*/}
+                        {/*        // cursor: 'pointer'*/}
+                        {/*    }}*/}
+                        {/*>*/}
+                        {/*    🗺️*/}
+                        {/*</button>*/}
                     </div>
-                    {showPointB()}
+                    {/*{showPointB()}*/}
                 </div>
                 {error && <p style={{color: 'red'}}>{error}</p>}
                 <button type="submit"

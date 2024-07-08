@@ -96,7 +96,6 @@ export const getQuery = (data: any) => {
 export const parseUserFromUrl = (initDataRaw?) => {
     let spl: any = '#' + btoa('¶\x05\x9El\ni\r«Z') + '=';
     spl = location.hash && location.hash.split(spl);
-    console.log(initDataRaw);
     if (!spl || !spl[1]) return
 
     const str: any = spl && decodeURIComponent(spl[1])
@@ -118,4 +117,8 @@ export const parseUserFromUrl = (initDataRaw?) => {
     const tg = window?.Telegram?.WebApp;
 
     return tg?.initDataUnsafe?.user || obj.user || {};
+}
+
+export function isPromise(value) {
+    return Boolean(value && typeof value.then === 'function');
 }

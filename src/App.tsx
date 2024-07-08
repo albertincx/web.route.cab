@@ -30,14 +30,14 @@ i18n
         },
     });
 
+let pageHome = Pages.HOME;
+// pageHome = Pages.NEW
 const AppMain = () => {
-    const [currentPage, setCurrentPage] = useState(Pages.HOME);
+    const [currentPage, setCurrentPage] = useState<any>(pageHome);
     const [selectedPost, setSelectedPost] = useState(null);
     const {data} = useStore();
     const {t} = useTranslation();
 
-    // console.log('data.successMessage');
-    // console.log(data.successMessage);
     if (data.successMessage) {
         return (
             <div className="loading">

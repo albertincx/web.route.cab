@@ -10,7 +10,7 @@ export const fetchAction = (url: string, params: IPostParam = {}) => {
 
     return fetch(API_URL + url + getQuery(query), requestParams(data)).then(async r => {
         if (r.status !== 200) {
-            throw 'error'
+            throw r.json()
         } else if (isListHeader) {
             const range = `${r.headers.get('Content-Range')}`;
             const data = await r.json();
