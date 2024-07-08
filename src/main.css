@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-::-webkit-scrollbar {
-    display: none;
-}
-
 html, body, #root {
     height: 100%;
 }

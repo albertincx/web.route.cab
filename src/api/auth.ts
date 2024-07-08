@@ -35,6 +35,9 @@ class Auth {
                 throw 'unauth'
             }
             return r.json()
+        }).then(() => {
+            this.accessToken = 'loggedIn';
+            localStorage.setItem(this.localStorageKey, this.accessToken);
         })
     }
 }
