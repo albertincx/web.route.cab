@@ -16,7 +16,7 @@ export const requestParams = (data: any = {}, putToken = true) => {
     // @ts-ignore
     h['Content-type'] = 'application/json';
 
-    if (putToken && AuthApi.accessToken) {
+    if (putToken) {
         // @ts-ignore
         h['Authorization'] = `Bearer ${AuthApi.accessToken}`
     }
@@ -95,7 +95,7 @@ export const parseUserFromUrl = (initDataRaw?) => {
     if (!spl || !spl[1]) return
 
     const str: any = spl && decodeURIComponent(spl[1])
-    if (!str) return
+    if (!str) return {};
 
     const obj: any = str.split("&").reduce((prev: any, curr: any) => {
         let p: any = curr.split("=");

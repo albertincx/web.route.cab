@@ -9,7 +9,7 @@ import {parseUserFromUrl} from "../utils/commonUtils";
 export const Settings = ({setCurrentPage}) => {
     const {t} = useTranslation();
     const [currentLanguage, setCurrentLanguage] = useState('en');
-    const uId = parseUserFromUrl().id;
+    const uId = parseUserFromUrl()?.id;
     const changeLanguage = (lng) => {
         i18n.changeLanguage(lng);
         setCurrentLanguage(lng);

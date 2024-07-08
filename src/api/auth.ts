@@ -6,7 +6,6 @@ class Auth {
     private localStorageKey = 'route-cab-api-access-token';
 
     public accessToken: string | null = null;
-    public id: any = null;
 
     constructor() {
         this.accessToken = localStorage.getItem(this.localStorageKey);
@@ -25,9 +24,7 @@ class Auth {
         if (!query) query = window?.Telegram?.WebApp?.initData;
         if (query) {
             this.accessToken = query;
-            this.id = query
         }
-
         const data = {query};
         // @ts-ignore
         return fetch(`${API_URL}${USER_API}/login`, requestParams(data, false)).then(r => {
@@ -36,8 +33,9 @@ class Auth {
             }
             return r.json()
         }).then(() => {
-            this.accessToken = 'loggedIn';
-            localStorage.setItem(this.localStorageKey, this.accessToken);
+            if (this.accessToken) {
+                localStorage.setItem(this.localStorageKey, this.accessToken);
+            }
         })
     }
 }
