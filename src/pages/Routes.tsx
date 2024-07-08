@@ -4,8 +4,8 @@ import withPagination from "../hooks/withPagination";
 import {ROUTES_API} from "../api/constants";
 
 
-export const Routes = ({onClick}) => {
-    const {data, resetQuery, ref, dataLength} = withPagination(ROUTES_API)
+export const Routes = ({onClick, activeTab = ''}) => {
+    const {data, resetQuery, ref, dataLength} = withPagination(ROUTES_API, activeTab)
 
     return (
         <div style={{textAlign: 'center'}}>

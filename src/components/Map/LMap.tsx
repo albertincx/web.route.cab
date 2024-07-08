@@ -6,6 +6,7 @@ import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
 import 'leaflet/dist/leaflet.css';
+import {Fields} from "../../utils/constants";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -57,7 +58,7 @@ const LMap: FC<any> = ({record, setValue}) => {
                             let k = 'pointB';
                             if (r === 0) {
                             } else {
-                                k = 'pointA';
+                                k = Fields.POINT_A;
                             }
                             setValue(k, v, {
                                 shouldTouch: true,

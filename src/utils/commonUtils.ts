@@ -29,7 +29,7 @@ export const requestParams = (data: any = {}) => {
     if (Object.keys(data).length) {
         opts.method = 'post'
         opts.body = JSON.stringify(data);
-        if (data.delete) opts.method = 'delete'
+        if (data.deleteId) opts.method = 'delete'
     }
     return opts;
 }

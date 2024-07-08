@@ -4,6 +4,10 @@ import {osm} from 'pigeon-maps/providers';
 import {fetchAction} from "../api/actions";
 import {ROUTES_API} from "../api/constants";
 import LMap from "../components/Map/LMap";
+import {MapModal} from "../components/Map/MapModal";
+import {NewPostForm} from "../components/NewForm";
+import {LoaderPage} from "./LoaderPage";
+import {Pages} from "../utils/constants";
 
 const PostDetailPage = ({post: me, setCurrentPage}) => {
     const [startPoint, setStartPoint] = useState([55.7558, 37.6173]); // Москва
@@ -11,37 +15,32 @@ const PostDetailPage = ({post: me, setCurrentPage}) => {
     const [departureTime, setDepartureTime] = useState("2023-07-05T10:00");
     const [returnTime, setReturnTime] = useState("2023-07-10T18:00");
     const [status, setStatus] = useState("Запланировано");
-    const [post, setPost] = useState<any>({});
+    const [post, setPost] = useState<any>(null);
+    const [isMapOpen, setIsMapOpen] = useState(false);
+
     useEffect(() => {
         fetchAction(ROUTES_API + `/${me._id}`, {
             // query: me._id,
         }).then(p => {
-            setPost(p || {});
+            // console.log(p);
+            setPost(p);
         });
     }, []);
     const formatDate = (dateString) => {
         const options: any = {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'};
         return new Date(dateString).toLocaleDateString('ru-RU', options);
     };
+
     const setValue = () => {
 
     }
+
+    if (!post) {
+        return <LoaderPage />
+    }
     return (
         <div>
-            <button
-                onClick={() => setCurrentPage('home')}
-                style={{
-                    marginBottom: '20px',
-                    padding: '10px',
-                    backgroundColor: '#0095f6',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer'
-                }}
-            >
-                Назад
-            </button>
+            {!!post && <NewPostForm post={post} setCurrentPage={() => setCurrentPage(Pages.HOME)} />}
             <div style={{
                 backgroundColor: '#fff',
                 border: '1px solid #dbdbdb',
@@ -74,7 +73,7 @@ const PostDetailPage = ({post: me, setCurrentPage}) => {
                     }}>{status}</span></p>
                 </div>
             </div>
-            <div style={{height: '400px', marginBottom: '20px'}}>
+            <div style={{height: 'auto', marginBottom: '20px'}}>
                 <Map
                     provider={osm}
                     dprs={[1, 2]}
@@ -86,13 +85,22 @@ const PostDetailPage = ({post: me, setCurrentPage}) => {
                     <Marker width={50} anchor={startPoint as Point}/>
                     <Marker width={50} anchor={endPoint as Point}/>
                 </Map>
-                <LMap record={{}} setValue={setValue} />
+                <LMap record={{}} setValue={setValue}/>
             </div>
             <div>
                 <h3>Маршрут</h3>
                 <p>Начальная точка: {startPoint.join(', ')}</p>
                 <p>Конечная точка: {endPoint.join(', ')}</p>
             </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <MapModal
+                isOpen={isMapOpen}
+                onClose={() => setIsMapOpen(false)}
+                location=""
+            />
         </div>
     );
 };

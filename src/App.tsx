@@ -1,4 +1,8 @@
 import React, {lazy, Suspense, useState} from 'react';
+import i18n from "i18next";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {initReactI18next, useTranslation} from "react-i18next";
+
 import {useStore} from "./store/base";
 import {Settings} from "./pages/Settings";
 import {Header} from "./components/Header";
@@ -6,12 +10,10 @@ import {BottomMenu} from "./components/Bottom";
 import {Profile} from "./pages/Profile";
 import {Routes} from "./pages/Routes";
 import {NewPostForm} from "./components/NewForm";
-import {initReactI18next, useTranslation} from "react-i18next";
 import Storage from "./utils/storage";
-import i18n from "i18next";
 import index18 from "./i18n";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {LoaderPage} from "./pages/LoaderPage";
+import {Pages} from "./utils/constants";
 
 const PageDetail = lazy(() => import("./pages/PostDetail"))
 const lang = Storage.get('lang');
@@ -29,7 +31,7 @@ i18n
     });
 
 const AppMain = () => {
-    const [currentPage, setCurrentPage] = useState('home');
+    const [currentPage, setCurrentPage] = useState(Pages.HOME);
     const [selectedPost, setSelectedPost] = useState(null);
     const {data} = useStore();
     const {t} = useTranslation();
@@ -57,16 +59,24 @@ const AppMain = () => {
 
     const handlePostClick = (post) => {
         setSelectedPost(post);
-        setCurrentPage('postDetail');
+        setCurrentPage(Pages.DETAIL);
     };
 
     const renderContent = () => {
         switch (currentPage) {
-            case 'home':
+            case Pages.HOME:
                 return (
                     <>
                         <Header title="Route cab" setCurrentPage={setCurrentPage}/>
                         <Routes onClick={handlePostClick}/>
+                        {/*<LoaderPage />*/}
+                    </>
+                );
+            case Pages.SEARCH:
+                return (
+                    <>
+                        <Header title="Route cab" setCurrentPage={setCurrentPage}/>
+                        <Routes onClick={handlePostClick} activeTab={Pages.SEARCH}/>
                         {/*<LoaderPage />*/}
                     </>
                 );
@@ -79,21 +89,22 @@ const AppMain = () => {
             //             ))}
             //         </>
             //     );
-            case 'newPost':
+
+            case Pages.NEW:
                 return (
                     <>
                         <Header title="Create new route" setCurrentPage={setCurrentPage}/>
-                        <NewPostForm setCurrentPage={setCurrentPage}/>
+                        <NewPostForm setCurrentPage={() => setCurrentPage(Pages.HOME)}/>
                     </>
                 );
-            case 'profile':
+            case Pages.PROFILE:
                 return (
                     <>
                         <Header title="Profile" setCurrentPage={setCurrentPage}/>
                         <Profile/>
                     </>
                 );
-            case 'settings':
+            case Pages.SETTINGS:
                 return (
                     <>
                         <Header title="Settings" setCurrentPage={setCurrentPage}/>

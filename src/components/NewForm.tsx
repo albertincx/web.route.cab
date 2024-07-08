@@ -4,7 +4,8 @@ import {useTranslation} from "react-i18next";
 import {IRoute} from "../store/types";
 import {DEFAULT_POINT, ROUTES_API} from "../api/constants";
 import {fetchAction} from "../api/actions";
-import {MapModal} from "./Map/MapModal";
+import {Dialog} from "./Map/Dialog";
+import {Fields} from "../utils/constants";
 
 const MapSelector: React.FC<any> = ({onLocationSelect, initialLocation}) => {
     const [center, setCenter] = useState(initialLocation || [55.7558, 37.6173]);
@@ -13,6 +14,7 @@ const MapSelector: React.FC<any> = ({onLocationSelect, initialLocation}) => {
 
     const handleClick = ({latLng}) => {
         setMarker(latLng);
+        // console.log(latLng);
         onLocationSelect(latLng);
     };
 
@@ -35,18 +37,21 @@ const MapSelector: React.FC<any> = ({onLocationSelect, initialLocation}) => {
 
 const initialForm: IRoute = {
     name: '',
-    pointA: DEFAULT_POINT,
-    pointB: DEFAULT_POINT,
+    [Fields.POINT_A]: DEFAULT_POINT,
+    [Fields.POINT_B]: DEFAULT_POINT,
     hourA: '00:00',
     hourB: '00:00',
 }
-
+interface IForm {
+    post?: any;
+    setCurrentPage: any;
+}
 // Обновленный компонент формы нового поста
-export const NewPostForm = ({setCurrentPage}) => {
+export const NewPostForm: React.FC<IForm> = ({setCurrentPage, post}) => {
     const {t} = useTranslation();
-    const [form, setForm] = useState<any>(initialForm);
+    const [form, setForm] = useState<any>(post || initialForm);
     const [isMapOpen, setIsMapOpen] = useState(false);
-
+    // console.log(form);
     const [locationA, setLocationA] = useState('');
     const [locationB, setLocationB] = useState('');
     const [showMapA, setShowMapA] = useState(false);
@@ -57,7 +62,7 @@ export const NewPostForm = ({setCurrentPage}) => {
     const setField = name => (e) => {
         const val = e.target.value;
         if (val) {
-            if (name === 'pointA') {
+            if (name === Fields.POINT_A) {
                 // setLocationA(val);
             }
             if (name === 'pointB') {
@@ -72,8 +77,12 @@ export const NewPostForm = ({setCurrentPage}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!locationA || !locationB) {
+        if (!locationA && !locationB) {
             setError("Пожалуйста, укажите обе точки (А и Б)");
+            return;
+        }
+        if (!locationA || !locationB) {
+            setError("Пожалуйста, укажите обе точки " + (!locationB ? "B" : "A"));
             return;
         }
         fetchAction(ROUTES_API, {
@@ -85,11 +94,21 @@ export const NewPostForm = ({setCurrentPage}) => {
             if (!e.success && !e.id) {
                 setError(e.message);
             } else {
-                setCurrentPage('home');
+                setCurrentPage();
             }
         })
     };
-
+    const handleCloseModal = (isOk = false) => {
+        isOk && fetchAction(ROUTES_API + `/${post?.id}`, {
+            data: {
+                deleteId: post?.id,
+            }
+        }).then(() => {
+            // setIsMapOpen(false);
+            setCurrentPage()
+        });
+        if (!isOk) setIsMapOpen(false);
+    }
     const getCurrentLocation = (setLocation, fieldName) => {
         setIsLoading(true);
         setError('');
@@ -123,6 +142,14 @@ export const NewPostForm = ({setCurrentPage}) => {
     const handleLocationSelect = async (latLng, setLocation, fieldName) => {
         setIsLoading(true);
         setError('');
+        if (!latLng && !setLocation) {
+            if (fieldName === Fields.POINT_A) {
+                setShowMapA(!showMapA);
+            } else {
+                setShowMapB(!showMapB);
+            }
+            return;
+        }
         try {
             const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latLng[0]}&lon=${latLng[1]}`);
             const data = await response.json();
@@ -135,173 +162,223 @@ export const NewPostForm = ({setCurrentPage}) => {
         }
     };
     const btnClass = "py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+    const handleDelete = () => {
+        setIsMapOpen(true)
+    }
+    const inputClass = "bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+
+    const showPointB = () => {
+        return showPointA(true)
+    }
+    const showPointA = (isPointB = false) => {
+        if (!isPointB && !showMapA) return;
+        if (isPointB && !showMapB) return;
+        return (
+            <Dialog
+                isOpen
+                onClose={() => handleLocationSelect(null, null, isPointB ? Fields.POINT_B : Fields.POINT_A)}
+                text="Delete post?"
+                title="Delete?"
+                full
+            >
+                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{t('Select point')}</h3>
+                <MapSelector
+                    onLocationSelect={(latLng) => handleLocationSelect(latLng, setLocationA, isPointB ? Fields.POINT_B : Fields.POINT_A)}/>
+            </Dialog>
+        )
+    }
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            style={{display: 'flex', flexDirection: 'column', gap: '20px'}}
-            className="mx-auto"
-        >
-            <input
-                type="text"
-                value={form.name || ''}
-                onChange={setField('name')}
-                placeholder={t('Route name')}
-                style={{padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb'}}
-                required
-            />
-            {/*<textarea*/}
-            {/*    value={caption}*/}
-            {/*    onChange={(e) => setCaption(e.target.value)}*/}
-            {/*    placeholder="Напишите подпись..."*/}
-            {/*    style={{padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb', minHeight: '100px'}}*/}
-            {/*/>*/}
-            <label htmlFor="time" className="block mb-2 text-sm font-medium text-gray-900 ">
-                {t('Select time from A to B')}:
-            </label>
-            <div className="relative">
+        <div>
+            {!!post && (
+                <div className="text-right">
+                    <button
+                        className={btnClass}
+                        onClick={handleDelete}>
+                        ❌
+                    </button>
+                </div>
+            )}
+            <form
+                onSubmit={handleSubmit}
+                style={{display: 'flex', flexDirection: 'column', gap: '20px'}}
+                className="mx-auto"
+            >
+                <div>{t('Route name')}</div>
                 <input
-                    type="time"
-                    id="timeA"
-                    className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    min="00:00"
-                    max="24:00"
-                    value={form.hourA || "00:00"}
-                    onChange={setField('hourA')}
+                    type="text"
+                    value={form.name || ''}
+                    onChange={setField('name')}
+                    placeholder={t('Route name')}
+                    style={{padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb'}}
                     required
                 />
-            </div>
-            <label htmlFor="time" className="block mb-2 text-sm font-medium text-gray-900 ">
-                {t('Select time from B to A')}:
-            </label>
+                {/*<textarea*/}
+                {/*    value={caption}*/}
+                {/*    onChange={(e) => setCaption(e.target.value)}*/}
+                {/*    placeholder="Напишите подпись..."*/}
+                {/*    style={{padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb', minHeight: '100px'}}*/}
+                {/*/>*/}
+                <label htmlFor="time" className="block mb-2 text-sm font-medium text-gray-900 ">
+                    {t('Select time from A to B')}:
+                </label>
+                <div className="relative">
+                    <input
+                        type="time"
+                        id="timeA"
+                        className={inputClass}
+                        min="00:00"
+                        max="24:00"
+                        value={form.hourA || "00:00"}
+                        onChange={setField('hourA')}
+                        required
+                    />
+                </div>
+                <label htmlFor="time" className="block mb-2 text-sm font-medium text-gray-900 ">
+                    {t('Select time from B to A')}:
+                </label>
 
-            <div className="relative">
-                <input
-                    type="time"
-                    id="timeB"
-                    className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    min="00:00"
-                    max="24:00"
-                    value={form.hourB || "00:00"}
-                    onChange={setField('hourB')}
-                    required
-                />
-            </div>
-            <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                <div style={{display: 'flex', gap: '10px'}}>
-                    {/*<input*/}
-                    {/*    type="text"*/}
-                    {/*    value={locationA}*/}
-                    {/*    // onChange={setField('pointA')}*/}
-                    {/*    placeholder="Точка А"*/}
-                    {/*    style={{flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb'}}*/}
-                    {/*/>*/}
-                    <button
-                        className={btnClass}
-                        type="button"
-                        onClick={() => getCurrentLocation(setLocationA, 'pointA')}
-                        style={{
-                            // padding: '10px',
-                            // backgroundColor: '#0095f6',
-                            // color: 'white',
-                            // border: 'none',
-                            // borderRadius: '5px',
-                            // cursor: 'pointer'
-                        }}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? 'Загрузка...' : '📍'}
-                    </button>
-                    <button
-                        className={btnClass}
-                        type="button"
-                        onClick={() => setShowMapA(!showMapA)}
-                        style={{
-                            // padding: '10px',
-                            // backgroundColor: '#0095f6',
-                            // color: 'white',
-                            // border: 'none',
-                            // borderRadius: '5px',
-                            // cursor: 'pointer'
-                        }}
-                    >
-                        🗺️
-                    </button>
+                <div className="relative">
+                    <input
+                        type="time"
+                        id="timeB"
+                        className={inputClass}
+                        min="00:00"
+                        max="24:00"
+                        value={form.hourB || "00:00"}
+                        onChange={setField('hourB')}
+                        required
+                    />
                 </div>
-                {showMapA &&
-                    <MapSelector onLocationSelect={(latLng) => handleLocationSelect(latLng, setLocationA, 'pointA')}/>}
-                <div style={{display: 'flex', gap: '10px'}}>
-                    {/*<input*/}
-                    {/*    type="text"*/}
-                    {/*    value={locationB}*/}
-                    {/*    // onChange={setField('pointB')}*/}
-                    {/*    placeholder="Точка Б"*/}
-                    {/*    style={{flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb'}}*/}
-                    {/*/>*/}
-                    <button
-                        type="button"
-                        onClick={() => getCurrentLocation(setLocationB, 'pointB')}
-                        style={{
-                            // padding: '10px',
-                            // backgroundColor: '#0095f6',
-                            // color: 'white',
-                            // border: 'none',
-                            // borderRadius: '5px',
-                            // cursor: 'pointer'
-                        }}
-                        className={btnClass}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? 'Загрузка...' : '📍'}
-                    </button>
-                    <button
-                        className={btnClass}
-                        type="button"
-                        onClick={() => setShowMapB(!showMapB)}
-                        style={{
-                            // padding: '10px',
-                            // backgroundColor: '#0095f6',
-                            // color: 'white',
-                            // border: 'none',
-                            // borderRadius: '5px',
-                            // cursor: 'pointer'
-                        }}
-                    >
-                        🗺️
-                    </button>
+                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                    <div style={{display: 'flex', gap: '10px'}}>
+                        {/*<input*/}
+                        {/*    type="text"*/}
+                        {/*    value={locationA}*/}
+                        {/*    // onChange={setField('pointA')}*/}
+                        {/*    placeholder="Точка А"*/}
+                        {/*    style={{flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb'}}*/}
+                        {/*/>*/}
+                        <button
+                            className={btnClass}
+                            type="button"
+                            onClick={() => getCurrentLocation(setLocationA, Fields.POINT_A)}
+                            style={{
+                                // padding: '10px',
+                                // backgroundColor: '#0095f6',
+                                // color: 'white',
+                                // border: 'none',
+                                // borderRadius: '5px',
+                                // cursor: 'pointer'
+                            }}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Загрузка...' : '📍'}
+                        </button>
+                        <button
+                            className={btnClass}
+                            type="button"
+                            onClick={() => setShowMapA(!showMapA)}
+                            style={{
+                                // padding: '10px',
+                                // backgroundColor: '#0095f6',
+                                // color: 'white',
+                                // border: 'none',
+                                // borderRadius: '5px',
+                                // cursor: 'pointer'
+                            }}
+                        >
+                            🗺️
+                        </button>
+                    </div>
+                    {showPointA()}
+                    <div style={{display: 'flex', gap: '10px'}}>
+                        {/*<input*/}
+                        {/*    type="text"*/}
+                        {/*    value={locationB}*/}
+                        {/*    // onChange={setField('pointB')}*/}
+                        {/*    placeholder="Точка Б"*/}
+                        {/*    style={{flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #dbdbdb'}}*/}
+                        {/*/>*/}
+                        <button
+                            type="button"
+                            onClick={() => getCurrentLocation(setLocationB, 'pointB')}
+                            style={{
+                                // padding: '10px',
+                                // backgroundColor: '#0095f6',
+                                // color: 'white',
+                                // border: 'none',
+                                // borderRadius: '5px',
+                                // cursor: 'pointer'
+                            }}
+                            className={btnClass}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Загрузка...' : '📍'}
+                        </button>
+                        <button
+                            className={btnClass}
+                            type="button"
+                            onClick={() => setShowMapB(!showMapB)}
+                            style={{
+                                // padding: '10px',
+                                // backgroundColor: '#0095f6',
+                                // color: 'white',
+                                // border: 'none',
+                                // borderRadius: '5px',
+                                // cursor: 'pointer'
+                            }}
+                        >
+                            🗺️
+                        </button>
+                    </div>
+                    {showPointB()}
                 </div>
-                {showMapB &&
-                    <MapSelector onLocationSelect={(latLng) => handleLocationSelect(latLng, setLocationB, 'pointB')}/>}
-            </div>
-            {error && <p style={{color: 'red'}}>{error}</p>}
-            <button type="submit"
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                {t('Create route')}
-            </button>
-            {/*  { && (*/}
-            {/*      <div style={{padding: '0 10px 10px'}}>*/}
-            {/*<span style={{*/}
-            {/*    color: '#0095f6',*/}
-            {/*}}>*/}
-            {/*  📍 {location}*/}
-            {/*</span>*/}
-            {/*      </div>*/}
-            {/*  )}*/}
-            <MapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} location={location}/>
-            {/*<button*/}
-            {/*    onClick={() => setCurrentPage('home')}*/}
-            {/*    style={{*/}
-            {/*        padding: '10px',*/}
-            {/*        backgroundColor: '#0095f6',*/}
-            {/*        color: 'white',*/}
-            {/*        border: 'none',*/}
-            {/*        borderRadius: '5px',*/}
-            {/*        cursor: 'pointer',*/}
-            {/*        marginTop: '20px'*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    Вернуться на главную*/}
-            {/*</button>*/}
-        </form>
+                {error && <p style={{color: 'red'}}>{error}</p>}
+                <button type="submit"
+                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    {t('Create route')}
+                </button>
+                {/*  { && (*/}
+                {/*      <div style={{padding: '0 10px 10px'}}>*/}
+                {/*<span style={{*/}
+                {/*    color: '#0095f6',*/}
+                {/*}}>*/}
+                {/*  📍 {location}*/}
+                {/*</span>*/}
+                {/*      </div>*/}
+                {/*  )}*/}
+                <Dialog
+                    isOpen={isMapOpen}
+                    onClose={handleCloseModal}
+                    text="Delete post?"
+                    title="Delete?"
+                >
+                    <svg className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+                         aria-hidden="true"
+                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                    <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                        Delete post?
+                    </h3>
+                </Dialog>
+                {/*<button*/}
+                {/*    onClick={() => setCurrentPage('home')}*/}
+                {/*    style={{*/}
+                {/*        padding: '10px',*/}
+                {/*        backgroundColor: '#0095f6',*/}
+                {/*        color: 'white',*/}
+                {/*        border: 'none',*/}
+                {/*        borderRadius: '5px',*/}
+                {/*        cursor: 'pointer',*/}
+                {/*        marginTop: '20px'*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    Вернуться на главную*/}
+                {/*</button>*/}
+            </form>
+        </div>
     );
 };

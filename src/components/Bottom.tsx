@@ -1,6 +1,7 @@
 
 // Компонент нижнего меню (без изменений)
 import React from "react";
+import {Pages} from "../utils/constants";
 
 export const BottomMenu = ({setCurrentPage}) => (
     <nav style={{
@@ -14,14 +15,14 @@ export const BottomMenu = ({setCurrentPage}) => (
         zIndex: 1000
     }}>
         <div style={{display: 'flex', justifyContent: 'space-around', maxWidth: '975px', margin: '0 auto'}}>
-            <button onClick={() => setCurrentPage('home')}
-                    style={{background: 'none', border: 'none', fontSize: '24px'}}>🏠
+            <button onClick={() => setCurrentPage(Pages.HOME)}
+                    style={{background: 'none', border: 'none', fontSize: '24px'}}>🚘
             </button>
-            {/*<button onClick={() => setCurrentPage('favorites')}*/}
-            {/*        style={{background: 'none', border: 'none', fontSize: '24px'}}>⭐*/}
-            {/*</button>*/}
+            <button onClick={() => setCurrentPage(Pages.SEARCH)}
+                    style={{background: 'none', border: 'none', fontSize: '24px'}}>🔎
+            </button>
             <button onClick={() => setCurrentPage('newPost')}
-                    style={{background: 'none', border: 'none', fontSize: '24px'}}>➕
+                    style={{background: 'none', border: 'none', fontSize: '24px'}}>🆕
             </button>
             {/*<button style={{background: 'none', border: 'none', fontSize: '24px'}}>❤️</button>*/}
             <button onClick={() => setCurrentPage('profile')}
