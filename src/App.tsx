@@ -15,6 +15,7 @@ import {LoaderPage} from "./pages/LoaderPage";
 
 const PageDetail = lazy(() => import("./pages/PostDetail"))
 const lang = Storage.get('lang');
+
 // Initialize i18next
 i18n
     .use(initReactI18next)
@@ -33,9 +34,25 @@ const AppMain = () => {
     const {data} = useStore();
     const {t} = useTranslation();
 
+    // console.log('data.successMessage');
     // console.log(data.successMessage);
     if (data.successMessage) {
-        return null;
+        return (
+            <div className="loading">
+                <div className="loader-wrap welcome-loader">
+                    <div>
+                        <div>
+                            <div
+                                className="p-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300"
+                                role="alert">
+                                <span className="font-medium"></span> Soon, stay tuned add me <a
+                                href="https://t.me/routeCabBot">t.me/routeCabBot</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     const handlePostClick = (post) => {

@@ -1,5 +1,5 @@
-import {AuthApi} from "../api/auth";
 import {ON_BOARDING_VER} from "../store/consts";
+import {retrieveLaunchParams} from "@tma.js/sdk";
 
 export function timeout(s: number, f?: () => void) {
     const tm = (r: any) =>
@@ -10,16 +10,21 @@ export function timeout(s: number, f?: () => void) {
     return new Promise(r => tm(r));
 }
 
-export const requestParams = (data: any = {}, putToken = true) => {
+export const requestParams = (data: any = {}) => {
     let opts: any = {};
     const h = {};
     // @ts-ignore
     h['Content-type'] = 'application/json';
-
-    if (putToken) {
-        // @ts-ignore
-        h['Authorization'] = `Bearer ${AuthApi.accessToken}`
+    let query = window?.Telegram?.WebApp?.initData;
+    try {
+        let {initDataRaw} = retrieveLaunchParams();
+        query = initDataRaw
+    } catch (e) {
+        //
     }
+    // @ts-ignore
+    h['Authorization'] = `Bearer ${query}`
+
     opts.headers = h;
     if (Object.keys(data).length) {
         opts.method = 'post'

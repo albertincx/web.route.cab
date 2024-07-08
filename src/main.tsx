@@ -3,9 +3,9 @@ import './polyfills';
 
 import React, {lazy, StrictMode, Suspense} from 'react'
 import ReactDOM from 'react-dom/client'
-
-import {AuthApi} from "./api/auth";
 import {LoaderPage} from "./pages/LoaderPage";
+import {fetchAction} from "./api/actions";
+import {ROUTES_API} from "./api/constants";
 
 const App = lazy(() => import('./App'));
 
@@ -27,7 +27,10 @@ if (isTgPlace) {
     Telegram.WebApp.expand();
 }
 
-const authFetch = () => AuthApi.auth().then((e) => {
+const authFetch = () => fetchAction(ROUTES_API, {
+    query: {page: 1, range: `[1,1]`},
+    range: 'Content-Range',
+}).then(() => {
     ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Suspense fallback={<LoaderPage/>}>
             {import.meta.env.DEV ? (
@@ -41,7 +44,7 @@ const authFetch = () => AuthApi.auth().then((e) => {
     )
 });
 
-authFetch().catch((e) => {
+authFetch().catch(() => {
     ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <>
             <div className="loading">
@@ -51,7 +54,8 @@ authFetch().catch((e) => {
                             <div
                                 className="p-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300"
                                 role="alert">
-                                <span className="font-medium"></span> Soon, stay tuned add me <a href="https://t.me/routeCabBot">t.me/routeCabBot</a>
+                                <span className="font-medium"></span> Soon, stay tuned add me <a
+                                href="https://t.me/routeCabBot">t.me/routeCabBot</a>
                             </div>
                         </div>
                     </div>

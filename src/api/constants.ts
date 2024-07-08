@@ -8,7 +8,6 @@ if (noServer) apiUrl = '';
 
 export const API_URL = apiUrl;
 
-export const USER_API = '/users';
 export const ROUTES_API = '/routes';
 
 // tools
