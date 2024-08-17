@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom/client'
 import {LoaderPage} from "./pages/LoaderPage";
 import {fetchAction} from "./api/actions";
 import {ROUTES_API} from "./api/constants";
+import Login from "./components/Login";
 
 const App = lazy(() => import('./App'));
 
@@ -56,6 +57,7 @@ authFetch().catch(() => {
                                 role="alert">
                                 <span className="font-medium"></span> Soon, stay tuned add me <a
                                 href="https://t.me/routeCabBot">t.me/routeCabBot</a>
+                                <Login/>
                             </div>
                         </div>
                     </div>

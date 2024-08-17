@@ -14,6 +14,7 @@ import Storage from "./utils/storage";
 import index18 from "./i18n";
 import {LoaderPage} from "./pages/LoaderPage";
 import {Pages} from "./utils/constants";
+import Login from "./components/Login";
 
 const PageDetail = lazy(() => import("./pages/PostDetail"))
 const lang = Storage.get('lang');
@@ -49,6 +50,7 @@ const AppMain = () => {
                                 role="alert">
                                 <span className="font-medium"></span> Soon, stay tuned add me <a
                                 href="https://t.me/routeCabBot">t.me/routeCabBot</a>
+                                <Login/>
                             </div>
                         </div>
                     </div>
