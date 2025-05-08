@@ -149,7 +149,7 @@ function App() {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <header className="bg-blue-600 py-4 mb-6">
+            <header className="bg-blue-800 py-4 mb-6">
                 <h1 className="text-3xl font-bold text-white text-center">{t('title')}</h1>
                 <p className="text-white text-center">{t('subtitle')}</p>
             </header>
@@ -324,44 +324,48 @@ function App() {
                     ) : (
                         <div className="space-y-4">
                             {/* @ts-ignore */}
-                            {routes.map(route => (
-                                <div
-                                    key={route.id}
-                                    className="border rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-blue-50"
-                                >
-                                    <div>
-                                        <div className="font-bold text-lg text-blue-800">
-                                            [{route.pointA.coordinates[0].toFixed(5)}, {route.pointA.coordinates[1].toFixed(5)}]
-                                            →
-                                            [{route.pointB.coordinates[0].toFixed(5)}, {route.pointB.coordinates[1].toFixed(5)}]
-                                        </div>
-                                        <div className="text-sm text-gray-800 mt-1">
+                            {routes.map(route => {
+                                route.pointA = route.pointA || {coordinates: [0,0]}
+                                route.pointB = route.pointB || {coordinates: [0,0]}
+                                return (
+                                    <div
+                                        key={route.id}
+                                        className="border rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-blue-50"
+                                    >
+                                        <div>
+                                            <div className="font-bold text-lg text-blue-800">
+                                                [{route.pointA.coordinates[0].toFixed(5)}, {route.pointA.coordinates[1].toFixed(5)}]
+                                                →
+                                                [{route.pointB.coordinates[0].toFixed(5)}, {route.pointB.coordinates[1].toFixed(5)}]
+                                            </div>
+                                            <div className="text-sm text-gray-800 mt-1">
                                             <span
                                                 className="font-medium">{t('days_active_label')}:</span> {route.days?.join(', ')}
-                                        </div>
-                                        <div className="text-sm text-gray-800">
+                                            </div>
+                                            <div className="text-sm text-gray-800">
                                             <span
                                                 className="font-medium">{t('departure_time_label')}:</span> {route.time}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="text-sm">
-                                        <div>
+                                        <div className="text-sm">
+                                            <div>
                                             <span
                                                 className="font-medium">{t('number_seats_label')}:</span> {route.seats}
-                                        </div>
-                                        <div>
+                                            </div>
+                                            <div>
                                             <span
                                                 className="font-medium">{t('contact_method_label')}:</span> {route.contact}
+                                            </div>
+                                            <button
+                                                className="mt-2 bg-blue-600 text-white py-1 px-2 rounded hover:bg-blue-700"
+                                                onClick={() => viewRoute(route.id)}
+                                            >
+                                                {t('view_route_button')}
+                                            </button>
                                         </div>
-                                        <button
-                                            className="mt-2 bg-blue-600 text-white py-1 px-2 rounded hover:bg-blue-700"
-                                            onClick={() => viewRoute(route.id)}
-                                        >
-                                            {t('view_route_button')}
-                                        </button>
                                     </div>
-                                </div>
-                            ))}
+                                )
+                            })}
                         </div>
                     )}
                 </div>

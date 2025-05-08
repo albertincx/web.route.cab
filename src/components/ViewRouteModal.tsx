@@ -29,6 +29,7 @@ const ViewRouteModal = ({show, route, onClose}: Props) => {
     // @ts-ignore
 
     const {pointA: start, pointB: end} = route;
+    start.coordinates = start.coordinates || [0,0]
     start.lat = start.coordinates[0]
     start.lng = start.coordinates[1]
     end.lat = end.coordinates[0]
