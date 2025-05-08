@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.leaflet-control-attribution svg {
+    visibility: hidden;
+}

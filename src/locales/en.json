@@ -1,0 +1,21 @@
+{
+  "title": "DailyPool",
+  "subtitle": "Share and discover daily carpool routes",
+  "add_route_button": "+ Add Route",
+  "modal_title": "Add Your Carpool Route",
+  "start_location_label": "Start Location",
+  "select_start_location_button": "Select Start Location",
+  "end_location_label": "End Location",
+  "select_end_location_button": "Select End Location",
+  "days_active_label": "Days Active",
+  "departure_time_label": "Departure Time",
+  "number_seats_label": "Number of Seats",
+  "contact_method_label": "Contact Method",
+  "add_route_button_submit": "Add Route",
+  "shared_routes_header": "Shared Routes",
+  "no_routes_message": "No routes shared yet. Add your daily route!",
+  "view_route_button": "View Route",
+  "location_picker_cancel": "Cancel",
+  "location_picker_choose": "Choose",
+  "required_field_error": "This field is required"
+}

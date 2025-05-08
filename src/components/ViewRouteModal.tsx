@@ -1,0 +1,88 @@
+// ViewRouteModal.tsx
+import * as React from 'react';
+import {MapContainer, TileLayer} from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import 'leaflet-routing-machine';
+import {createRef} from 'react';
+import {Route} from "../routes.ts";
+import {t} from "i18next"; // импортируем useTranslation
+
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: "/marker-icon-2x.png",
+    iconUrl: "/marker-icon.png",
+    shadowUrl: "/marker-shadow.png",
+});
+
+// Интерфейс props для компонента
+interface Props {
+    show: boolean;
+    route: Route;
+    onClose: () => void;
+}
+
+const mapRef = createRef();
+
+const ViewRouteModal = ({show, route, onClose}: Props) => {
+
+    if (!show) return null;
+    // @ts-ignore
+
+    const {pointA: start, pointB: end} = route;
+    start.lat = start.coordinates[0]
+    start.lng = start.coordinates[1]
+    end.lat = end.coordinates[0]
+    end.lng = end.coordinates[1]
+    // Отображение маршрута после инициализации карты
+    React.useEffect(() => {
+        if (mapRef.current) {
+            // @ts-ignore
+            const control = L.Routing.control({
+                waypoints: [
+                    L.latLng(start.lat, start.lng),
+                    L.latLng(end.lat, end.lng)
+                ],
+                // @ts-ignore
+                router: L.Routing.osrmv1(),
+                lineOptions: {
+                    styles: [{color: '#2c7be5', opacity: 1, weight: 5}],
+                },
+                fitSelectedRoutes: true,
+                // @ts-ignore
+            }).addTo(mapRef.current.target);
+        }
+    }, [start, end]);
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
+            <div className="bg-white rounded-lg shadow p-6 max-w-md w-full relative max-h-[90vh] overflow-y-auto">
+                <button
+                    className="absolute top-2 right-3 text-gray-400 hover:text-red-600 text-lg"
+                    onClick={onClose}
+                    aria-label="Close"
+                >×
+                </button>
+                <h2 className="text-xl font-semibold mb-4">{t('route_details')}</h2>
+                <div className="mb-4">
+                    <strong>{t('from_label')}:</strong> [{start.lat}, {start.lng}]<br/>
+                    <strong>{t('to_label')}:</strong> [{end.lat}, {end.lng}]
+                </div>
+                <MapContainer
+                    center={[start.lat, start.lng]}
+                    zoom={12}
+                    style={{height: "400px", width: "100%"}}
+                    scrollWheelZoom={false}
+                    // @ts-ignore
+                    whenReady={(mapInstance) => mapRef.current = mapInstance} // устанавливаем ссылку на экземпляр карты
+                >
+                    <TileLayer
+                        attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                </MapContainer>
+            </div>
+        </div>
+    );
+};
+
+export default ViewRouteModal;

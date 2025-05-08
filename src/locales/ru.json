@@ -1,0 +1,21 @@
+{
+  "title": "Ежедневное карпулинг-сообщество",
+  "subtitle": "Делитесь и находите ежедневные маршруты совместного пользования автомобилем",
+  "add_route_button": "+ Добавить маршрут",
+  "modal_title": "Добавьте ваш маршрут",
+  "start_location_label": "Начальная точка",
+  "select_start_location_button": "Выберите начальную точку",
+  "end_location_label": "Конечная точка",
+  "select_end_location_button": "Выберите конечную точку",
+  "days_active_label": "Дни активности",
+  "departure_time_label": "Время отправления",
+  "number_seats_label": "Количество мест",
+  "contact_method_label": "Способ связи",
+  "add_route_button_submit": "Добавить маршрут",
+  "shared_routes_header": "Общедоступные маршруты",
+  "no_routes_message": "Маршрутов пока нет. Добавьте ваш ежедневный маршрут!",
+  "view_route_button": "Посмотреть маршрут",
+  "location_picker_cancel": "Отмена",
+  "location_picker_choose": "Выбрать",
+  "required_field_error": "Это поле обязательно"
+}

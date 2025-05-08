@@ -27,3 +27,4 @@ dist-ssr
 .env
 /demo/
 yarn.lock
+logs/
