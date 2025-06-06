@@ -148,7 +148,7 @@ function App() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-100 dark-mode pb-20">
             <header className="bg-blue-800 py-4 mb-6">
                 <h1 className="text-3xl font-bold text-white text-center">{t('title')}</h1>
                 <p className="text-white text-center">{t('subtitle')}</p>
@@ -163,9 +163,14 @@ function App() {
                     </button>
                 </div>
                 {showModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
+                    <div
+                        className="bg-gray-800 fixed inset-0 bg-opacity-30 flex items-center justify-center z-10"
+                        onClick={handleClose}
+                    >
                         <div
-                            className="bg-white rounded-lg shadow p-6 max-w-md w-full relative max-h-[90vh] overflow-y-auto">
+                            className="rounded-lg shadow p-6 max-w-md w-full relative max-h-[90vh] overflow-y-auto"
+                            onClick={e => e.stopPropagation()}
+                        >
                             <button
                                 className="absolute top-2 right-3 text-gray-400 hover:text-red-600 text-lg"
                                 onClick={handleClose}
@@ -173,7 +178,7 @@ function App() {
                             >×
                             </button>
                             <h2 className="text-xl font-semibold mb-4">{t('modal_title')}</h2>
-                            <form onSubmit={handleSubmit} className="space-y-5">
+                            <form onSubmit={handleSubmit} className="space-y-5 relative min-h-screen">
                                 <div>
                                     <div>
                                         <label className="block mb-1 font-medium">{t('start_location_label')}</label>
@@ -262,7 +267,7 @@ function App() {
                                                 }))}
                                                 // @ts-ignore
 
-                                                className={`${form.seats === seatOption ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'} py-2 px-4 rounded-md focus:outline-none transition-colors duration-150 ring-offset-2 focus:ring-2 focus:ring-blue-500`}
+                                                className={`${form.seats === seatOption ? 'bg-blue-600 text-white' : 'text-gray-700'} py-2 px-4 rounded-md focus:outline-none transition-colors duration-150 ring-offset-2 focus:ring-2 focus:ring-blue-500`}
                                             >
                                                 {seatOption}
                                             </button>
@@ -285,7 +290,7 @@ function App() {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                                    className="sticky w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
                                     // @ts-ignore
 
                                     disabled={!form.start || !form.end}
@@ -317,7 +322,7 @@ function App() {
                     />
                 )}
 
-                <div className="bg-white rounded shadow p-6">
+                <div className="rounded shadow p-6">
                     <h2 className="text-xl font-semibold mb-3">{t('shared_routes_header')}</h2>
                     {routes.length === 0 ? (
                         <div className="text-gray-600 text-center">{t('no_routes_message')}</div>
@@ -325,8 +330,8 @@ function App() {
                         <div className="space-y-4">
                             {/* @ts-ignore */}
                             {routes.map(route => {
-                                route.pointA = route.pointA || {coordinates: [0,0]}
-                                route.pointB = route.pointB || {coordinates: [0,0]}
+                                route.pointA = route.pointA || { coordinates: [0,0] };
+                                route.pointB = route.pointB || { coordinates: [0,0] };
                                 return (
                                     <div
                                         key={route.id}
@@ -334,27 +339,44 @@ function App() {
                                     >
                                         <div>
                                             <div className="font-bold text-lg text-blue-800">
-                                                [{route.pointA.coordinates[0].toFixed(5)}, {route.pointA.coordinates[1].toFixed(5)}]
-                                                →
-                                                [{route.pointB.coordinates[0].toFixed(5)}, {route.pointB.coordinates[1].toFixed(5)}]
+                                                {route.name} {/* Добавлено название маршрута */}
+                                                {" "}
+                                                →{" "}
+                                                [
+                                                {route.pointA.coordinates[0].toFixed(5)},
+                                                {route.pointA.coordinates[1].toFixed(5)}
+                                                ]{" "}
+                                                →{" "}
+                                                [
+                                                {route.pointB.coordinates[0].toFixed(5)},
+                                                {route.pointB.coordinates[1].toFixed(5)}
+                                                ]
                                             </div>
                                             <div className="text-sm text-gray-800 mt-1">
-                                            <span
-                                                className="font-medium">{t('days_active_label')}:</span> {route.days?.join(', ')}
+                                                <span className="font-medium">{t('days_active_label')}:</span>{" "}
+                                                {route.days?.join(", ")}
                                             </div>
                                             <div className="text-sm text-gray-800">
-                                            <span
-                                                className="font-medium">{t('departure_time_label')}:</span> {route.time}
+                                                <span className="font-medium">{t('departure_time_label')}:</span>{" "}
+                                                {route.time}
                                             </div>
                                         </div>
                                         <div className="text-sm">
                                             <div>
-                                            <span
-                                                className="font-medium">{t('number_seats_label')}:</span> {route.seats}
+                                                <span className="font-medium">{t('number_seats_label')}:</span>{" "}
+                                                {route.seats}
                                             </div>
                                             <div>
-                                            <span
-                                                className="font-medium">{t('contact_method_label')}:</span> {route.contact}
+                                                <span className="font-medium">{t('contact_method_label')}:</span>{" "}
+                                                {route.contact}
+                                            </div>
+                                            <div className="mt-2">
+                                                <span className="font-medium mr-2">{t('status_label')}:</span>{" "}
+                                                {route.active ? (
+                                                    <span className="text-green-600 font-bold">{t('active_status')}</span>
+                                                ) : (
+                                                    <span className="text-red-600 font-bold">{t('inactive_status')}</span>
+                                                )}
                                             </div>
                                             <button
                                                 className="mt-2 bg-blue-600 text-white py-1 px-2 rounded hover:bg-blue-700"
@@ -364,7 +386,7 @@ function App() {
                                             </button>
                                         </div>
                                     </div>
-                                )
+                                );
                             })}
                         </div>
                     )}
@@ -377,6 +399,40 @@ function App() {
                     />
                 )}
             </main>
+            {/* Fixed Bottom Menu */}
+            <nav className="fixed bottom-0 left-0 right-0 border-t border-gray-200 shadow-lg z-20 flex justify-around items-center h-16">
+                <button
+                    className="flex flex-col items-center text-blue-700 hover:text-blue-900 focus:outline-none"
+                    // Placeholder for routes
+                    onClick={handleClose}
+                >
+                    <span className="material-icons">map</span>
+                    <span className="text-xs">Routes</span>
+                </button>
+                <button
+                    className="flex flex-col items-center text-blue-700 hover:text-blue-900 focus:outline-none"
+                    // Placeholder for my routes
+                    onClick={() => {}}
+                >
+                    <span className="material-icons">directions_car</span>
+                    <span className="text-xs">My Routes</span>
+                </button>
+                <button
+                    className="flex flex-col items-center text-blue-700 hover:text-blue-900 focus:outline-none"
+                    onClick={handleOpen}
+                >
+                    <span className="material-icons">add_circle</span>
+                    <span className="text-xs">Add Route</span>
+                </button>
+                <button
+                    className="flex flex-col items-center text-blue-700 hover:text-blue-900 focus:outline-none"
+                    // Placeholder for profile
+                    onClick={() => {}}
+                >
+                    <span className="material-icons">person</span>
+                    <span className="text-xs">Profile</span>
+                </button>
+            </nav>
         </div>
     );
 }

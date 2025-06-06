@@ -3,3 +3,60 @@
 .leaflet-control-attribution svg {
     visibility: hidden;
 }
+
+/* Dark mode */
+.dark-mode {
+    background-color: #1a202c;
+    color: white;
+}
+
+.dark-mode .bg-primary {
+    background-color: #2b3f55;
+}
+
+.dark-mode .btn-primary {
+    background-color: #2b3f55;
+    color: white;
+}
+
+.dark-mode input[type=text], .dark-mode select, .dark-mode button {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.dark-mode label {
+    color: #ccc;
+}
+
+.dark-mode a {
+    color: #4dbffd;
+}
+
+.dark-mode .card-header {
+    background-color: #222f3e;
+    color: white;
+}
+
+.dark-mode .card-body {
+    background-color: #1a202c;
+    color: white;
+}
+
+.dark-mode .map-container {
+    background-color: black;
+}
+
+.dark-mode .map-marker {
+    color: yellow;
+}
+
+/* Global transitions for smoother animations */
+body * {
+    transition: all 0.3s cubic-bezier(.4, .2, .2, 1);
+}
+
+.leaflet-bottom,
+.leaflet-bottom a {
+    pointer-events: none;
+}

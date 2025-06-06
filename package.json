@@ -11,8 +11,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/parser": "^7.27.2",
+    "@babel/types": "^7.27.1",
     "@tailwindcss/vite": "^4.1.5",
     "@telegram-apps/sdk": "^3.9.2",
+    "babel-traverse": "^6.26.0",
     "i18next": "^25.1.1",
     "i18next-browser-languagedetector": "^8.1.0",
     "leaflet": "^1.9.4",
