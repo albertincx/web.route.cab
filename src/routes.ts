@@ -22,8 +22,9 @@ export interface Route {
 export async function sendNewRouteToServer(route: Route): Promise<void> {
     try {
         let lp = getTmaParams(), w;
-        let w2 = parseLaunchParamsQuery(location.hash);
+        let w2 = {};
         try {
+            w2 = parseLaunchParamsQuery(location.hash)
             w = retrieveRawInitData();
             console.log(w);
         } catch (e) {
@@ -34,6 +35,7 @@ export async function sendNewRouteToServer(route: Route): Promise<void> {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                // @ts-ignore
                 "authorization": "Bearer " + (w || w2['#tgWebAppData']),
             },
             body: JSON.stringify(route),
@@ -49,8 +51,9 @@ export async function sendNewRouteToServer(route: Route): Promise<void> {
 async function loadRoutesFromBackend(): Promise<Route[]> {
     try {
         let lp = getTmaParams(), w;
-        let w2 = parseLaunchParamsQuery(location.hash);
+        let w2 = {};
         try {
+            w2 = parseLaunchParamsQuery(location.hash)
             w = retrieveRawInitData();
             console.log(w);
         } catch (e) {
@@ -60,12 +63,14 @@ async function loadRoutesFromBackend(): Promise<Route[]> {
         const response = await fetch(API + '/routes', {
             headers: {
                 "Content-Type": "application/json",
+                // @ts-ignore
                 "authorization": "Bearer " + (w || w2['#tgWebAppData']),
             }
         }); // Здесь укажите реальный путь к вашему API
         if (!response.ok) throw new Error(`Ошибка при загрузке маршрутов (${response.status})`);
         return await response.json();
     } catch (err) {
+        console.log(err)
         console.error(err); // Логируем ошибку
         return [];
     }

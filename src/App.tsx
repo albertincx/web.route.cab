@@ -40,6 +40,8 @@ function App() {
     const [isChoosingStart, setIsChoosingStart] = useState(false);
     const [isChoosingEnd, setIsChoosingEnd] = useState(false);
     const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
+    const [headerMini, setHeaderMini] = useState(false);
+    const [showRequired, setShowRequired] = useState(false);
 
     // useEffect(() => {
     //     const stored = localStorage.getItem("routes");
@@ -51,6 +53,14 @@ function App() {
     useEffect(() => {
         localStorage.setItem("routes", JSON.stringify(routes));
     }, [routes]);
+
+    useEffect(() => {
+        const onScroll = () => {
+            setHeaderMini(window.scrollY > 40);
+        };
+        window.addEventListener('scroll', onScroll);
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
 
     function viewRoute(id: string) {
         setSelectedRouteId(id);
@@ -66,26 +76,24 @@ function App() {
     }
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        setShowRequired(false);
         const {name, value, type} = e.target;
         if (type === "number") {
             // @ts-ignore
-
             setForm((prevForm) => ({...prevForm, [name]: Number(value)}));
         } else {
             // @ts-ignore
-
             setForm((prevForm) => ({...prevForm, [name]: value}));
         }
     }
 
     function handleDayToggle(day: string) {
+        setShowRequired(false);
         // @ts-ignore
-
         setForm((prevForm) => ({
             ...prevForm,
             days: prevForm.days.includes(day)
                 // @ts-ignore
-
                 ? prevForm.days.filter((d) => d !== day)
                 : [...(prevForm.days || []), day],
         }));
@@ -93,12 +101,16 @@ function App() {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-
+        console.log('handleSubmit');
+        console.log('handleSubmit');
+        console.log('handleSubmit');
+        console.log('handleSubmit');
         if (!form.start || !form.end) {
+            setShowRequired(true);
             alert(t('required_field_error'));
             return;
         }
-
+        setShowRequired(false);
         const newRoute: Route = {
             id: `${Date.now()}-${Math.random()}`,
             start: form.start,
@@ -110,15 +122,11 @@ function App() {
         };
         sendNewRouteToServer(newRoute).then(() => {
             // @ts-ignore
-
             setRoutes([...routes, newRoute]); // обновляем состояние компонент только после успешного сохранения
             setShowModal(false);
         });
-        // setRoutes([...routes, newRoute]);
-        // setShowModal(false);
     }
     // @ts-ignore
-
     const selectedRoute = routes.find(route => route.id === selectedRouteId);
 
     function openLocationPicker(key: "start" | "end") {
@@ -141,27 +149,19 @@ function App() {
     }
 
     function renderErrorMessage(field: "start" | "end"): JSX.Element | null {
-        if ((field === "start" && !form.start) || (field === "end" && !form.end)) {
-            return <span className="text-red-500 ml-2">{t('required_field_error')}</span>;
+        if (showRequired && ((field === "start" && !form.start) || (field === "end" && !form.end))) {
+            return <span className="text-red-500 ml-2 animate-pulse">{t('required_field_error')}</span>;
         }
         return null;
     }
 
     return (
         <div className="min-h-screen bg-gray-100 dark-mode pb-20">
-            <header className="bg-blue-800 py-4 mb-6">
-                <h1 className="text-3xl font-bold text-white text-center">{t('title')}</h1>
-                <p className="text-white text-center">{t('subtitle')}</p>
+            <header className={`fixed top-0 left-0 right-0 bg-blue-900 dark:bg-gray-950 z-30 shadow-lg transition-all duration-300 ${headerMini ? 'py-1' : 'py-4 mb-6'}`} style={{minHeight: headerMini ? 48 : 80}}>
+                <h1 className={`text-center font-bold text-white transition-all duration-300 ${headerMini ? 'text-xl' : 'text-3xl'}`}>{t('title')}</h1>
+                {!headerMini && <p className="text-white text-center transition-all duration-300">{t('subtitle')}</p>}
             </header>
-            <main className="max-w-2xl mx-auto px-4">
-                <div className="flex justify-end mb-4">
-                    <button
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none"
-                        onClick={handleOpen}
-                    >
-                        {t('add_route_button')}
-                    </button>
-                </div>
+            <main className="max-w-2xl mx-auto px-4 pt-24">
                 {showModal && (
                     <div
                         className="bg-gray-800 fixed inset-0 bg-opacity-30 flex items-center justify-center z-10"
@@ -178,7 +178,9 @@ function App() {
                             >×
                             </button>
                             <h2 className="text-xl font-semibold mb-4">{t('modal_title')}</h2>
-                            <form onSubmit={handleSubmit} className="space-y-5 relative min-h-screen">
+                            <form onSubmit={handleSubmit} className="space-y-5 relative min-h-screen pb-20">
+                                {/* Hidden required checkbox hack for browser validation */}
+                                <input type="checkbox" style={{display: 'none'}} tabIndex={-1} required checked={!!form.start && !!form.end} readOnly />
                                 <div>
                                     <div>
                                         <label className="block mb-1 font-medium">{t('start_location_label')}</label>
@@ -227,14 +229,12 @@ function App() {
                                                 <input
                                                     type="checkbox"
                                                     // @ts-ignore
-
                                                     checked={form?.days?.includes(day) || false}
                                                     onChange={() => handleDayToggle(day)}
                                                     className="hidden"
                                                 />
                                                 <span
                                                     // @ts-ignore
-
                                                     className={`rounded-full w-6 h-6 inline-block transition duration-150 ease-in-out transform scale-100 ${form?.days?.includes(day) ? 'bg-blue-600' : 'bg-gray-300'}`}></span>
                                                 <span className="ml-2 text-gray-700">{day}</span>
                                             </label>
@@ -248,7 +248,6 @@ function App() {
                                         type="time"
                                         name="time"
                                         // @ts-ignore
-
                                         value={form.time || ''}
                                         onChange={handleChange}
                                         className="w-full border rounded px-3 py-2"
@@ -266,7 +265,6 @@ function App() {
                                                     seats: seatOption
                                                 }))}
                                                 // @ts-ignore
-
                                                 className={`${form.seats === seatOption ? 'bg-blue-600 text-white' : 'text-gray-700'} py-2 px-4 rounded-md focus:outline-none transition-colors duration-150 ring-offset-2 focus:ring-2 focus:ring-blue-500`}
                                             >
                                                 {seatOption}
@@ -281,22 +279,29 @@ function App() {
                                         type="text"
                                         name="contact"
                                         // @ts-ignore
-
                                         value={form.contact || ''}
                                         onChange={handleChange}
                                         className="w-full border rounded px-3 py-2"
                                         placeholder="Email, phone, or other"
                                     />
                                 </div>
-                                <button
-                                    type="submit"
-                                    className="sticky w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                                    // @ts-ignore
-
-                                    disabled={!form.start || !form.end}
-                                >
-                                    {t('add_route_button_submit')}
-                                </button>
+                                <div className="sticky bottom-0 left-0 right-0 pt-4 pb-2 z-10 flex gap-1">
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-blue-600 relative z-20 text-white py-2 rounded hover:bg-blue-700 shadow-lg"
+                                        // @ts-ignore
+                                        disabled={!form.start || !form.end}
+                                    >
+                                        {t('add_route_button_submit')}
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 shadow-lg"
+                                        onClick={handleClose}
+                                    >
+                                        {t('cancel')}
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -306,7 +311,6 @@ function App() {
                     <LocationPickerModal
                         show={isChoosingStart}
                         // @ts-ignore
-
                         initialPosition={{lat: form.start?.lat ?? 52.52, lng: form.start?.lng ?? 13.405}}
                         onChoose={(latlng) => chooseLocation('start', latlng)}
                         onCancel={closeLocationPicker}
@@ -322,7 +326,7 @@ function App() {
                     />
                 )}
 
-                <div className="rounded shadow p-6">
+                <div className="rounded shadow p-6_">
                     <h2 className="text-xl font-semibold mb-3">{t('shared_routes_header')}</h2>
                     {routes.length === 0 ? (
                         <div className="text-gray-600 text-center">{t('no_routes_message')}</div>
@@ -335,7 +339,7 @@ function App() {
                                 return (
                                     <div
                                         key={route.id}
-                                        className="border rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-blue-50"
+                                        className="border rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-gray-500"
                                     >
                                         <div>
                                             <div className="font-bold text-lg text-blue-800">
@@ -375,7 +379,7 @@ function App() {
                                                 {route.active ? (
                                                     <span className="text-green-600 font-bold">{t('active_status')}</span>
                                                 ) : (
-                                                    <span className="text-red-600 font-bold">{t('inactive_status')}</span>
+                                                    <span className="text-red-800 font-bold">{t('inactive_status')}</span>
                                                 )}
                                             </div>
                                             <button
@@ -400,7 +404,7 @@ function App() {
                 )}
             </main>
             {/* Fixed Bottom Menu */}
-            <nav className="fixed bottom-0 left-0 right-0 border-t border-gray-200 shadow-lg z-20 flex justify-around items-center h-16">
+            <nav className="fixed bottom-0 bg-gray-900 left-0 right-0 border-t border-gray-200 shadow-lg z-20 flex justify-around items-center h-16">
                 <button
                     className="flex flex-col items-center text-blue-700 hover:text-blue-900 focus:outline-none"
                     // Placeholder for routes
