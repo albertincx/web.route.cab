@@ -1,6 +1,6 @@
 // src/routes.ts
 import {useState, useEffect} from 'react';
-import {API} from "./consts.ts";
+import {API, API_ROUTES} from "./consts.ts";
 import {getTmaParams} from "./utils";
 import {retrieveRawInitData, parseLaunchParamsQuery} from "@telegram-apps/sdk";
 
@@ -31,7 +31,7 @@ export async function sendNewRouteToServer(route: Route): Promise<void> {
             console.log(e);
         }
         console.log(lp, w, w2);
-        const response = await fetch(API + "/routes", {
+        const response = await fetch(API + API_ROUTES, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -60,7 +60,7 @@ async function loadRoutesFromBackend(): Promise<Route[]> {
             console.log(e);
         }
         console.log(lp, w, w2);
-        const response = await fetch(API + '/routes', {
+        const response = await fetch(API + API_ROUTES, {
             headers: {
                 "Content-Type": "application/json",
                 // @ts-ignore
@@ -77,7 +77,7 @@ async function loadRoutesFromBackend(): Promise<Route[]> {
 }
 
 const useRoutes = () => {
-    const [routes, setRoutes] = useState<Route[]>([]);
+    const [routes, setRoutes] = useState<Route[] | null>(null);
 
     useEffect(() => {
         async function initRoutes() {

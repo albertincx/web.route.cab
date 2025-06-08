@@ -1,5 +1,3 @@
-// src/components/LocationPickerModal.tsx
-
 import * as React from 'react';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -15,20 +13,14 @@ interface Props {
     show: boolean;
     initialPosition: { lat: number; lng: number };
     onChoose: (position: { lat: number; lng: number }) => void;
-    onCancel: () => void;
 };
 
-const LocationPickerModal = ({ show, initialPosition, onChoose, onCancel }: Props) => {
+const LocationPickerModal = ({ show, initialPosition, onChoose }: Props) => {
     if (!show) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
+        <div>
             <div className="rounded-lg shadow p-6 max-w-md w-full relative max-h-[90vh] overflow-y-auto">
-                <button
-                    className="absolute top-2 right-3 text-gray-400 hover:text-red-600 text-lg"
-                    onClick={onCancel}
-                    aria-label="Close"
-                >×</button>
                 <h2 className="text-xl font-semibold mb-4">Choose a Point on the Map</h2>
                 <MapContainer
                     center={initialPosition}

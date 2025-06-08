@@ -18,12 +18,11 @@ L.Icon.Default.mergeOptions({
 interface Props {
     show: boolean;
     route: Route;
-    onClose: () => void;
 }
 
 const mapRef = createRef();
 
-const ViewRouteModal = ({show, route, onClose}: Props) => {
+const ViewRouteModal = ({show, route}: Props) => {
 
     if (!show) return null;
     // @ts-ignore
@@ -58,19 +57,8 @@ const ViewRouteModal = ({show, route, onClose}: Props) => {
     }, [start, end]);
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
-            <div className="rounded-lg shadow p-6 max-w-md w-full relative max-h-[90vh] overflow-y-auto">
-                <button
-                    className="absolute top-2 right-3 text-gray-400 hover:text-red-600 text-lg"
-                    onClick={onClose}
-                    aria-label="Close"
-                >×
-                </button>
-                <h2 className="text-xl font-semibold mb-4">{t('route_details')}</h2>
-                <div className="mb-4">
-                    <strong>{t('from_label')}:</strong> [{start.lat}, {start.lng}]<br/>
-                    <strong>{t('to_label')}:</strong> [{end.lat}, {end.lng}]
-                </div>
+        <div>
+            <div>
                 <MapContainer
                     center={[start.lat, start.lng]}
                     zoom={12}
