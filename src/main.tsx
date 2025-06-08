@@ -1,9 +1,10 @@
 import {createRoot} from "react-dom/client";
+import {I18nextProvider} from "react-i18next";
+
 import "./index.css";
 import i18n from './i18n'; // импортируем конфигурирование локализации
 
-import App from "./App.tsx";
-import {I18nextProvider} from "react-i18next";
+import App from "./App";
 import React from "react";
 
 class ErrorBoundary extends React.Component {

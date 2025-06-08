@@ -5,8 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
 import {createRef} from 'react';
-import {Route} from "../routes.ts";
-import {t} from "i18next"; // импортируем useTranslation
+import {Route} from "../routes";
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "/marker-icon-2x.png",

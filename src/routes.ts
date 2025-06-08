@@ -1,6 +1,6 @@
 // src/routes.ts
 import {useState, useEffect} from 'react';
-import {API, API_ROUTES} from "./consts.ts";
+import {API, API_ROUTES} from "./consts";
 import {getTmaParams} from "./utils";
 import {retrieveRawInitData, parseLaunchParamsQuery} from "@telegram-apps/sdk";
 
@@ -17,9 +17,12 @@ export interface Route {
     time: string;
     seats: number;
     contact: string;
+    name: string;
+    price: number;
+    driverName: string;
 }
 
-export async function sendNewRouteToServer(route: Route): Promise<void> {
+export async function sendNewRouteToServer(route: Route): Promise<boolean> {
     try {
         let lp = getTmaParams(), w;
         let w2 = {};
@@ -45,7 +48,9 @@ export async function sendNewRouteToServer(route: Route): Promise<void> {
     } catch (err) {
         console.error(err);
         alert("Возникла ошибка при сохранении маршрута.");
+        return false;
     }
+    return true;
 }
 
 async function loadRoutesFromBackend(): Promise<Route[]> {
