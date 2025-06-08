@@ -19,7 +19,7 @@ export const getTmaPlatform = () => {
 }
 
 export const getTmaParams = () => {
-    let lp = {w: {}};
+    let lp = {w: {id: 0, user: {id: 0, name: ''}}};
     try {
         // @ts-ignore
         lp = retrieveLaunchParams(true);
