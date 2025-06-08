@@ -16,7 +16,6 @@
     "@babel/types": "^7.27.6",
     "@tailwindcss/vite": "^4.1.8",
     "@telegram-apps/sdk": "^3.10.0",
-    "babel-traverse": "^6.26.0",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.1.0",
     "leaflet": "^1.9.4",

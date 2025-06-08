@@ -28,4 +28,3 @@ dist-ssr
 /demo/
 yarn.lock
 logs/
-package-lock.json
