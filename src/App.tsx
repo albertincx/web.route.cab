@@ -142,30 +142,14 @@ const mockRoutes: Route[] = [
 ];
 
 // Components
-const Header1: React.FC<{
-    isCompact: boolean;
-    onAddRoute: () => void;
-    showBackButton?: boolean;
-    onBack?: () => void;
-    title?: string;
-}> = ({isCompact, onAddRoute, showBackButton, onBack, title}) => (
-    <header
-        className={`fixed top-0 left-0 right-0 bg-blue-900 dark:bg-gray-950 z-30 shadow-lg transition-all duration-300 ${isCompact ? 'py-1' : 'py-4 mb-6'}`}
-        style={{minHeight: isCompact ? 48 : 80}}>
-        <h1 className={`text-center font-bold text-white transition-all duration-300 ${isCompact ? 'text-xl' : 'text-3xl'}`}>{title || 'RideShare'}</h1>
-        {!isCompact && !title &&
-            <p className="text-white text-center transition-all duration-300">Find & share rides easily</p>}
-    </header>
-);
-
-// Components
 const Header: React.FC<{
+    demo: boolean;
     isCompact: boolean;
     onAddRoute: () => void;
     showBackButton?: boolean;
     onBack?: () => void;
     title?: string;
-}> = ({isCompact, onAddRoute, showBackButton, onBack, title}) => (
+}> = ({isCompact, onAddRoute, showBackButton, onBack, title, demo}) => (
     <header
         className={`fixed top-0 left-0 right-0 bg-gradient-to-r from-gray-900 to-gray-800 z-10 shadow-lg border-b border-gray-700 transition-all duration-300 ${isCompact ? 'py-3' : 'py-6'}`}>
         <div className="max-w-6xl mx-auto px-4">
@@ -184,25 +168,29 @@ const Header: React.FC<{
                     </div>
                     <div>
                         <h1 className={`font-bold text-white transition-all duration-300 ${isCompact ? 'text-xl' : 'text-3xl'}`}>
-                            {title || 'RideShare'}
+                            {title || 'Route.cab'}
                         </h1>
-                        {!isCompact && !title && (
+                        {(
                             <p className="text-gray-300 text-sm">Find & share rides easily</p>
                         )}
                     </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <button
-                        onClick={onAddRoute}
-                        className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 transition-colors shadow-lg"
-                        title="Add Route"
-                    >
-                        <Plus className="h-5 w-5"/>
-                    </button>
-                    <button
-                        className="bg-white/10 backdrop-blur-sm rounded-full p-2 hover:bg-white/20 transition-colors border border-gray-600">
-                        <Filter className="h-5 w-5 text-gray-300"/>
-                    </button>
+                    {!demo && (
+                        <button
+                            onClick={onAddRoute}
+                            className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 transition-colors shadow-lg"
+                            title="Add Route"
+                        >
+                            <Plus className="h-5 w-5"/>
+                        </button>
+                    )}
+                    {!demo && (
+                        <button
+                            className="bg-white/10 backdrop-blur-sm rounded-full p-2 hover:bg-white/20 transition-colors border border-gray-600">
+                            <Filter className="h-5 w-5 text-gray-300"/>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
@@ -362,7 +350,8 @@ const RouteDetailsModal: React.FC<any> = ({hide, show, onClose, title, children}
                                 Close
                             </button>
                             <button
-                                className="flex-1 py-3 px-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium">
+                                className="flex-1 py-3 px-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium"
+                            >
                                 Contact Driver
                             </button>
                         </div>
@@ -785,8 +774,27 @@ function App() {
 
     if (!tma.w?.id) {
         return (
-            <div>
-                Please use <a href="https://t.me/RouteCabBot">https://t.me/RouteCabBot</a>
+            <div className="min-h-screen bg-gray-900">
+                <Header
+                    demo
+                    isCompact={headerCompact}
+                    onAddRoute={handleOpen}
+                    // @ts-ignore
+                    // showBackButton={showBackButton}
+                    // onBack={handleBack}
+                    // @ts-ignore
+                    title={getPageTitle()}
+                />
+
+                <main className="max-w-6xl mx-auto px-4 pt-24 pb-20">
+                    <div className={'h-32'}/>
+                    Please use
+                    <br/>
+                    <br/>
+                    <a
+                        className="flex-1 py-3 px-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium"
+                        href="https://t.me/RouteCabBot">https://t.me/RouteCabBot</a>
+                </main>
             </div>
         );
     }
