@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {miniApp, postEvent, retrieveRawInitData, swipeBehavior, viewport, parseInitDataQuery} from "@telegram-apps/sdk";
+import {miniApp, postEvent, retrieveRawInitData, swipeBehavior, viewport} from "@telegram-apps/sdk";
 
 interface MiniAppProps {
     loading: boolean;

@@ -55,11 +55,6 @@ body {
     color: yellow;
 }
 
-/* Global transitions for smoother animations */
-body * {
-    transition: all 0.3s cubic-bezier(.4, .2, .2, 1);
-}
-
 .leaflet-bottom,
 .leaflet-bottom a {
     pointer-events: none;

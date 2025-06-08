@@ -20,8 +20,7 @@ const LocationPickerModal = ({ show, initialPosition, onChoose }: Props) => {
 
     return (
         <div>
-            <div className="rounded-lg shadow p-6 max-w-md w-full relative max-h-[90vh] overflow-y-auto">
-                <h2 className="text-xl font-semibold mb-4">Choose a Point on the Map</h2>
+            <div className="rounded-lg shadow max-w-md w-full relative max-h-[90vh] overflow-y-auto">
                 <MapContainer
                     center={initialPosition}
                     zoom={12}

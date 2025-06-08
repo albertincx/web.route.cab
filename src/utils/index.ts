@@ -1,4 +1,9 @@
-import {retrieveLaunchParams} from "@telegram-apps/sdk";
+import {
+    retrieveLaunchParams,
+    retrieveRawInitData,
+    parseLaunchParamsQuery,
+    parseInitDataQuery
+} from "@telegram-apps/sdk";
 
 export const getTmaPlatform = () => {
     // test
@@ -14,11 +19,22 @@ export const getTmaPlatform = () => {
 }
 
 export const getTmaParams = () => {
-    let lp = {};
+    let lp = {w: {}};
     try {
+        // @ts-ignore
         lp = retrieveLaunchParams(true);
+        // @ts-ignore
+        lp.w = retrieveRawInitData();
+        console.log('initDataUser')
     } catch (e) {
-        //
+        console.log(e);
+    }
+    try {
+        let q = parseLaunchParamsQuery(location.hash);
+        // @ts-ignore
+        lp.w = parseInitDataQuery(q['#tgWebAppData'])?.user;
+    } catch (e) {
+        console.log(e);
     }
     // @ts-ignore
     return lp;

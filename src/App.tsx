@@ -25,6 +25,7 @@ import ViewRouteModal from './components/ViewRouteModal';
 import useRoutes, {sendNewRouteToServer} from "./routes";
 import useInitMiniApp from "./hooks/useMiniApp";
 import {AddRouteModal} from "./components/AddRouteModal";
+import {getTmaParams} from "./utils";
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "/marker-icon-2x.png",
@@ -325,7 +326,7 @@ const RouteCard: React.FC<{
     );
 };
 
-const RouteDetailsModal: React.FC<any> = ({hide, show, onClose, onViewProfile, children}) => {
+const RouteDetailsModal: React.FC<any> = ({hide, show, onClose, title, children}) => {
     if (!show) return null;
 
     return (
@@ -336,7 +337,7 @@ const RouteDetailsModal: React.FC<any> = ({hide, show, onClose, onViewProfile, c
                 className="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 max-w-lg w-full max-h-[90vh] flex flex-col">
                 <div className="p-6 pb-0">
                     <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-white">Route Details</h2>
+                        <h2 className="text-2xl font-bold text-white">{title || 'Route Details'}</h2>
                         <button
                             onClick={onClose}
                             className="p-2 hover:bg-gray-700 rounded-full transition-colors"
@@ -595,6 +596,7 @@ function App() {
     const [activeTab, setActiveTab] = useState('routes');
     const [headerCompact, setHeaderCompact] = useState(false);
     const [viewingProfile, setViewingProfile] = useState<string | null>(null);
+    const tma = getTmaParams();
 
     useEffect(() => {
         localStorage.setItem("routes", JSON.stringify(routes));
@@ -781,6 +783,14 @@ function App() {
         return null;
     }
 
+    if (!tma.w) {
+        return (
+            <div>
+                Please use <a href="https://t.me/RouteCabBot">https://t.me/RouteCabBot</a>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-gray-900">
             <Header
@@ -895,7 +905,9 @@ function App() {
 
             {isChoosingStart && (
                 <RouteDetailsModal
+                    title={'Choose a Point on the Map'}
                     onClose={closeLocationPicker}
+                    hide
                     show
                 >
                     <LocationPickerModal
@@ -908,8 +920,10 @@ function App() {
             )}
             {isChoosingEnd && (
                 <RouteDetailsModal
+                    title={'Choose a Point on the Map'}
                     onClose={closeLocationPicker}
                     show
+                    hide
                 >
                     <LocationPickerModal
                         show={isChoosingEnd}
