@@ -783,7 +783,7 @@ function App() {
         return null;
     }
 
-    if (!tma.w) {
+    if (!tma.w?.id) {
         return (
             <div>
                 Please use <a href="https://t.me/RouteCabBot">https://t.me/RouteCabBot</a>
