@@ -3,6 +3,7 @@ import {API, API_ROUTES} from "./consts";
 import {getTmaParams} from "./utils";
 import {retrieveRawInitData, parseLaunchParamsQuery} from "@telegram-apps/sdk";
 import {Route} from "./utils/types";
+import keyStorage from "./utils/storage";
 
 export async function sendNewRouteToServer(route: Route): Promise<boolean> {
     try {
@@ -26,7 +27,7 @@ export async function sendNewRouteToServer(route: Route): Promise<boolean> {
         }
         console.log(lp, w, w2);
         // @ts-ignore
-        let tok = w || w2['#tgWebAppData'];
+        let tok = w || w2['#tgWebAppData'] || keyStorage.get('token');
         const response = await fetch(API + API_ROUTES + q, {
             method,
             headers: {
@@ -70,7 +71,7 @@ export async function loadRoutesFromBackend(): Promise<Route[]> {
         }
         console.log(lp, w, w2);
         // @ts-ignore
-        let tok = w || w2['#tgWebAppData'];
+        let tok = w || w2['#tgWebAppData'] || keyStorage.get('token');
         const response = await fetch(API + API_ROUTES + '?range=[0,10]', {
             headers: {
                 "Content-Type": "application/json",
