@@ -33,3 +33,32 @@ export interface User {
     memberSince: string;
     bio?: string;
 }
+
+export interface IStore {
+    ready: any;
+    network: any;
+    chan: any;
+    lastInv: any;
+    isConnected: any;
+    closeApp: any;
+    openWs: any;
+    lang: any;
+    info: any;
+    time: any;
+    notifyMessage: any;
+    dialog: any;
+    data: any;
+    code: any;
+    getPaymentCode: any;
+    reconnectOn: any;
+    sendMessage: any;
+    notify: any;
+    update: any;
+    clearK: any;
+    refParam: any;
+    reconnect: any;
+    isMiniApp: any;
+    initDataUser: any;
+    tgLogin: any;
+    hasGoodConnect: any;
+}

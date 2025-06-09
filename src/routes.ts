@@ -4,6 +4,7 @@ import {getTmaParams} from "./utils";
 import {retrieveRawInitData, parseLaunchParamsQuery} from "@telegram-apps/sdk";
 import {Route} from "./utils/types";
 import keyStorage from "./utils/storage";
+import {usePStore} from "./store/store";
 
 export async function sendNewRouteToServer(route: Route): Promise<boolean> {
     try {
@@ -72,12 +73,25 @@ export async function loadRoutesFromBackend(): Promise<Route[]> {
         console.log(lp, w, w2);
         // @ts-ignore
         let tok = w || w2['#tgWebAppData'] || keyStorage.get('token');
+        if (!tok) {
+            usePStore.getState().update('modal', 1);
+        }
         const response = await fetch(API + API_ROUTES + '?range=[0,10]', {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": "Bearer " + tok,
             }
         }); // Здесь укажите реальный путь к вашему API
+        if (response.status === 401) {
+            console.log(response.status);
+            console.log(response.status);
+            console.log(response.status);
+            console.log(response.status);
+            keyStorage.rm('token');
+            keyStorage.sRm('user');
+            usePStore.getState().update('modal', 1);
+        }
+        console.log(response)
         if (!response.ok) throw new Error(`Ошибка при загрузке маршрутов (${response.status})`);
         return await response.json();
     } catch (err) {
