@@ -388,10 +388,8 @@ function App() {
     const [headerCompact, setHeaderCompact] = useState(false);
     const [viewingProfile, setViewingProfile] = useState<string | null>(null);
     const tma = getTmaParams();
-    if (gu) {
-        // @ts-ignore
-        tma.w = gu;
-    }
+
+    tma.w = tma.w || gu || sessionStorage.getItem("user");
 
     useEffect(() => {
         localStorage.setItem("routes", JSON.stringify(routes));
@@ -608,6 +606,7 @@ function App() {
             body: JSON.stringify({token}),
         }).then((res) => res.json());
         setGu(res.user);
+        sessionStorage && sessionStorage.setItem("user", res.user);
         localStorage.setItem("token", res.token);
         // alert("Logged in!");
     };
