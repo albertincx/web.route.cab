@@ -24,6 +24,7 @@ import useInitMiniApp from "./hooks/useMiniApp";
 import {AddRouteModal} from "./components/AddRouteModal";
 import {getTmaParams} from "./utils";
 import {RouteCard} from "./components/RouteCard";
+import keyStorage from "./utils/storage";
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "/marker-icon-2x.png",
@@ -389,7 +390,7 @@ function App() {
     const [viewingProfile, setViewingProfile] = useState<string | null>(null);
     const tma = getTmaParams();
 
-    tma.w = tma.w || gu || sessionStorage.getItem("user");
+    tma.w = tma.w || gu || keyStorage.sGetJ("user");
 
     useEffect(() => {
         localStorage.setItem("routes", JSON.stringify(routes));
@@ -522,50 +523,6 @@ function App() {
         }
     }
 
-    // function handleDayToggle(day: string) {
-    //     setShowRequired(false);
-    //     setForm((prevForm: any) => ({
-    //         ...prevForm,
-    //         days: prevForm.days.includes(day)
-    //             ? prevForm.days.filter((d: string) => d !== day)
-    //             : [...(prevForm.days || []), day],
-    //     }));
-    // }
-
-    // function handleSubmit(e: React.FormEvent) {
-    //     e.preventDefault();
-    //     if (!form.start || !form.end) {
-    //         setShowRequired(true);
-    //         alert(t('required_field_error'));
-    //         return;
-    //     }
-    //     setShowRequired(false);
-    //     const newRoute: Route = {
-    //         id: `${Date.now()}-${Math.random()}`,
-    //         name: form.name || "Route",
-    //         start: form.start,
-    //         end: form.end,
-    //         pointA: {coordinates: [form.start.lat, form.start.lng]},
-    //         pointB: {coordinates: [form.end.lat, form.end.lng]},
-    //         days: form.days,
-    //         time: form.time || "",
-    //         seats: form.seats || 1,
-    //         contact: form.contact || "",
-    //         active: true,
-    //         driverName: form.driverName || mockCurrentUser.name,
-    //         driverId: mockCurrentUser.id
-    //     };
-    //     // @ts-ignore
-    //     sendNewRouteToServer(newRoute).then((success) => {
-    //         // @ts-ignore
-    //         if (success) {
-    //             // @ts-ignore
-    //             setRoutes([...routes, newRoute]);
-    //             setShowModal(false);
-    //         }
-    //     });
-    // }
-
     function openLocationPicker(key: "start" | "end") {
         if (key === "start") {
             setIsChoosingStart(true);
@@ -606,7 +563,7 @@ function App() {
             body: JSON.stringify({token}),
         }).then((res) => res.json());
         setGu(res.user);
-        sessionStorage && sessionStorage.setItem("user", res.user);
+        keyStorage.sSetJ("user", res.user);
         localStorage.setItem("token", res.token);
         // alert("Logged in!");
     };
