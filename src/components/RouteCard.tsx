@@ -1,7 +1,7 @@
 import React from "react";
 import {Clock, Edit, MapPin, Phone, Star, Trash2, Users} from "lucide-react";
 
-import {Route} from "../routes";
+import {Route} from "../utils/types";
 
 export const RouteCard: React.FC<{
     route: Route;

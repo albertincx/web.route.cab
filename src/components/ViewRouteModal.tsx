@@ -5,7 +5,9 @@ import 'leaflet-routing-machine';
 import {createRef} from 'react';
 
 import 'leaflet/dist/leaflet.css';
-import {Route, sendNewRouteToServer} from "../routes";
+
+import {sendNewRouteToServer} from "../routes";
+import {Route} from "../utils/types";
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "/marker-icon-2x.png",

@@ -19,47 +19,19 @@ import {useTranslation} from 'react-i18next';
 
 import LocationPickerModal from './components/LocationPickerModal';
 import ViewRouteModal from './components/ViewRouteModal';
-import useRoutes, {loadRoutesFromBackend, Route, sendNewRouteToServer} from "./routes";
+import useRoutes, {loadRoutesFromBackend, sendNewRouteToServer} from "./routes";
 import useInitMiniApp from "./hooks/useMiniApp";
 import {AddRouteModal} from "./components/AddRouteModal";
 import {getTmaParams} from "./utils";
 import {RouteCard} from "./components/RouteCard";
 import keyStorage from "./utils/storage";
+import {Route, LatLng} from "./utils/types";
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "/marker-icon-2x.png",
     iconUrl: "/marker-icon.png",
     shadowUrl: "/marker-shadow.png",
 });
-
-// Types
-interface LatLng {
-    lat: number;
-    lng: number;
-}
-
-interface User {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    rating: number;
-    totalRides: number;
-    memberSince: string;
-    bio?: string;
-}
-
-// Mock data
-const mockCurrentUser: User = {
-    id: "user-1",
-    name: "John Doe",
-    email: "john.doe@email.com",
-    phone: "+49 123 456 7890",
-    rating: 4.8,
-    totalRides: 127,
-    memberSince: "January 2023",
-    bio: "Friendly driver with 5+ years experience. Love meeting new people and helping with commutes!"
-};
 
 // Components
 const Header: React.FC<{
@@ -191,7 +163,7 @@ const MyRoutesPage: React.FC<{
     onDeleteRoute: (id: string) => void;
     onViewRoute: (route: Route) => void;
 }> = ({routes, onEditRoute, onDeleteRoute, onViewRoute}) => {
-    const myRoutes = routes?.filter(route => route.driverId === mockCurrentUser.id);
+    const myRoutes: any[] = [];
 
     return (
         <div className="space-y-6">
@@ -235,11 +207,11 @@ const MyRoutesPage: React.FC<{
 };
 
 const ProfilePage: React.FC<{
-    user: User;
+    user: any;
     viewingUserId?: string;
     onBack?: () => void;
 }> = ({user, viewingUserId, onBack}) => {
-    const isOwnProfile = !viewingUserId || viewingUserId === mockCurrentUser.id;
+    const isOwnProfile = false;
     const displayUser = viewingUserId ? user : user;
 
     return (
@@ -478,7 +450,7 @@ function App() {
     };
 
     const getPageTitle = () => {
-        if (viewingProfile && viewingProfile !== mockCurrentUser.id) {
+        if (viewingProfile && true) {
             const user = {};
             // @ts-ignore
             return user ? `${user.name}'s Profile` : 'Profile';
@@ -493,7 +465,7 @@ function App() {
         }
     };
 
-    const showBackButton = viewingProfile && viewingProfile !== mockCurrentUser.id;
+    const showBackButton = viewingProfile && true;
 
     const handleBack = () => {
         setViewingProfile(null);
@@ -670,7 +642,7 @@ function App() {
 
                     {(activeTab === 'profile' || viewingProfile) && (
                         <ProfilePage
-                            user={mockCurrentUser}
+                            user={tma.w}
                             // @ts-ignore
                             viewingUserId={viewingProfile}
                             onBack={handleBack}
