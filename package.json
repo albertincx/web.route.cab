@@ -14,6 +14,7 @@
     "@babel/core": "^7.27.4",
     "@babel/parser": "^7.27.5",
     "@babel/types": "^7.27.6",
+    "@react-oauth/google": "^0.12.2",
     "@tailwindcss/vite": "^4.1.8",
     "@telegram-apps/sdk": "^3.10.0",
     "i18next": "^25.2.1",

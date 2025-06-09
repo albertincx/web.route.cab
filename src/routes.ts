@@ -27,21 +27,6 @@ export interface Route {
     rating?: number;
     totalRides?: number;
 }
-export interface Route1 {
-    id: string;
-    start: LatLng;
-    end: LatLng;
-    days: string[];
-    time: string;
-    seats: number;
-    contact: string;
-    name: string;
-    price: number;
-    status?: number;
-    active?: boolean;
-    rating?: any;
-    driverName: string;
-}
 
 export async function sendNewRouteToServer(route: Route): Promise<boolean> {
     try {
@@ -64,12 +49,14 @@ export async function sendNewRouteToServer(route: Route): Promise<boolean> {
             console.log(e);
         }
         console.log(lp, w, w2);
+        // @ts-ignore
+        let tok = getCookie('token') || w || w2['#tgWebAppData'];
         const response = await fetch(API + API_ROUTES + q, {
             method,
             headers: {
                 "Content-Type": "application/json",
                 // @ts-ignore
-                "authorization": "Bearer " + (w || w2['#tgWebAppData']),
+                "authorization": "Bearer " + tok,
             },
             body: JSON.stringify(route),
         });
@@ -94,6 +81,15 @@ export async function sendNewRouteToServer(route: Route): Promise<boolean> {
     return true;
 }
 
+// @ts-ignore
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) { // @ts-ignore
+        return parts.pop().split(';').shift();
+    }
+}
+
 export async function loadRoutesFromBackend(): Promise<Route[]> {
     try {
         let lp = getTmaParams(), w;
@@ -106,11 +102,12 @@ export async function loadRoutesFromBackend(): Promise<Route[]> {
             console.log(e);
         }
         console.log(lp, w, w2);
+        // @ts-ignore
+        let tok = getCookie('token') || w || w2['#tgWebAppData'];
         const response = await fetch(API + API_ROUTES + '?range=[0,10]', {
             headers: {
                 "Content-Type": "application/json",
-                // @ts-ignore
-                "authorization": "Bearer " + (w || w2['#tgWebAppData']),
+                "authorization": "Bearer " + tok,
             }
         }); // Здесь укажите реальный путь к вашему API
         if (!response.ok) throw new Error(`Ошибка при загрузке маршрутов (${response.status})`);

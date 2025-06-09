@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
+import {GoogleLogin} from "@react-oauth/google";
+
 import {
-    MapPin,
-    Clock,
-    Users,
     Phone,
     Plus,
     Navigation,
@@ -11,10 +10,8 @@ import {
     Filter,
     ArrowLeft,
     Edit,
-    Trash2,
     Star,
     Settings,
-    LogOut
 } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -592,6 +589,21 @@ function App() {
         return null;
     }
 
+    // @ts-ignore
+    const handleLoginSuccess = async (credentialResponse) => {
+        const token = credentialResponse.credential;
+        // Send token to backend
+        await fetch("https://api.route.cab/auth/google", {
+            method: "POST",
+            credentials: "include", // Send/receive cookies
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({token}),
+        });
+        // alert("Logged in!");
+    };
+
     if (!tma.w?.id) {
         return (
             <div className="min-h-screen bg-gray-900">
@@ -614,6 +626,11 @@ function App() {
                     <a
                         className="flex-1 py-3 px-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium"
                         href="https://t.me/RouteCabBot">https://t.me/RouteCabBot</a>
+                    <GoogleLogin
+                        onSuccess={handleLoginSuccess}
+                        onError={() => alert("Login Failed")}
+                        useOneTap // Optional: enables auto popup for returning users
+                    />
                 </main>
             </div>
         );
