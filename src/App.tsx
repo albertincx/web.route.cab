@@ -373,6 +373,7 @@ function App() {
     const {t} = useTranslation(); // используем хук для получения переводов
     const {isMini} = useInitMiniApp()
     const [routes, setRoutes] = useRoutes();
+    const [gu, setGu] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [form, setForm] = useState<any>({days: [], time: '', start: undefined, end: undefined});
     const [isChoosingStart, setIsChoosingStart] = useState(false);
@@ -387,6 +388,10 @@ function App() {
     const [headerCompact, setHeaderCompact] = useState(false);
     const [viewingProfile, setViewingProfile] = useState<string | null>(null);
     const tma = getTmaParams();
+    if (gu) {
+        // @ts-ignore
+        tma.w = gu;
+    }
 
     useEffect(() => {
         localStorage.setItem("routes", JSON.stringify(routes));
@@ -592,15 +597,18 @@ function App() {
     // @ts-ignore
     const handleLoginSuccess = async (credentialResponse) => {
         const token = credentialResponse.credential;
+        // localStorage.setItem("token", token);
         // Send token to backend
-        await fetch("https://api.route.cab/auth/google", {
+        const res = await fetch("https://api.route.cab/auth/google", {
             method: "POST",
             credentials: "include", // Send/receive cookies
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({token}),
-        });
+        }).then((res) => res.json());
+        setGu(res.user);
+        localStorage.setItem("token", res.token);
         // alert("Logged in!");
     };
 
