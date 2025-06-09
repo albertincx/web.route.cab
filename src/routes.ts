@@ -78,7 +78,7 @@ export async function sendNewRouteToServer(route: Route): Promise<boolean> {
             const b = await response.json();
             console.log(response, b);
             let msg = `Ошибка при сохранении маршрута (${response.status})`;
-            if (b.message.match('route with this name is already exists')) {
+            if (b.message?.match('route with this name is already exists')) {
                 msg = 'route with this name is already exists';
                 // msg = `маршрут с таким названием уже существует. Попробуйте другой`;
             }
