@@ -371,8 +371,7 @@ const BottomNavigation: React.FC<{
 // Main App Component
 function App() {
     const {t} = useTranslation(); // используем хук для получения переводов
-    const {isMini} = useInitMiniApp();
-    const [open, setOpen] = useState(false);
+    const {isMini} = useInitMiniApp()
     const [routes, setRoutes] = useRoutes();
     const [showModal, setShowModal] = useState(false);
     const [form, setForm] = useState<any>({days: [], time: '', start: undefined, end: undefined});
@@ -629,39 +628,11 @@ function App() {
                         href="https://t.me/RouteCabBot">https://t.me/RouteCabBot</a>
                     <br/>
                     <br/>
-                    {/*<GoogleLogin*/}
-                    {/*    onSuccess={handleLoginSuccess}*/}
-                    {/*    onError={() => alert("Login Failed")}*/}
-                    {/*    useOneTap // Optional: enables auto popup for returning users*/}
-                    {/*/>*/}
-                    <div className="p-4">
-                        <button
-                            onClick={() => setOpen(true)}
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                        >
-                            Sign in with Google
-                        </button>
-
-                        {open && (
-                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                                <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-4 relative">
-                                    <button
-                                        onClick={() => setOpen(false)}
-                                        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
-                                    >
-                                        ×
-                                    </button>
-
-                                    <h2 className="text-lg font-bold mb-4">Google Login</h2>
-                                    <iframe
-                                        src="https://api.route.cab/google/auth" // example — use your auth page
-                                        className="w-full h-96 border rounded"
-                                        title="Google Login"
-                                    />
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    <GoogleLogin
+                        onSuccess={handleLoginSuccess}
+                        onError={() => alert("Login Failed")}
+                        useOneTap // Optional: enables auto popup for returning users
+                    />
                 </main>
             </div>
         );
