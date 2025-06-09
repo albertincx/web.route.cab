@@ -12,9 +12,11 @@ import useRoutes, {loadRoutesFromBackend, sendNewRouteToServer} from "./routes";
 import useInitMiniApp from "./hooks/useMiniApp";
 import {AddRouteModal} from "./components/AddRouteModal";
 import {getTmaParams} from "./utils";
-import {RouteCard} from "./components/RouteCard";
+import {usePStore} from "./store/store";
 import keyStorage from "./utils/storage";
 import {LatLng, Route} from "./utils/types";
+
+import {RouteCard} from "./components/RouteCard";
 import {NotFoundRoutes} from "./components/NotFoundRoutes";
 import {MyRoutesPage} from "./components/MyRoutesPage";
 import {ProfilePage} from "./components/ProfilePage";
@@ -117,6 +119,9 @@ const BottomNavigation: React.FC<{
 function App() {
     const {t} = useTranslation(); // используем хук для получения переводов
     const {isMini} = useInitMiniApp()
+    // @ts-ignore
+    const tick = usePStore(state => state.tick);
+
     const [routes, setRoutes] = useRoutes();
     const [gu, setGu] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -137,7 +142,7 @@ function App() {
     // tma.w = tma.w || gu || keyStorage.sGetJ("user");
     let user = (tma.w && tma.w.id ? tma.w : false) || gu || keyStorage.sGetJ("user");
 
-    // console.log(keyStorage.sGetJ("user"))
+    // console.log(keyStorage.sGetJ("user"), user)
     useEffect(() => {
         localStorage.setItem("routes", JSON.stringify(routes));
     }, [routes]);
@@ -296,25 +301,9 @@ function App() {
     }
 
     // @ts-ignore
-    const handleLoginSuccess = async (credentialResponse) => {
-        const token = credentialResponse.credential;
-        // localStorage.setItem("token", token);
-        // Send token to backend
-        const res = await fetch("https://api.route.cab/auth/google", {
-            method: "POST",
-            credentials: "include", // Send/receive cookies
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({token}),
-        }).then((res) => res.json());
-        setGu(res.user);
-        keyStorage.sSetJ("user", res.user);
-        localStorage.setItem("token", res.token);
-        // alert("Logged in!");
-    };
     console.log('tma')
     console.log(tma)
+
     if (!user.id) {
         return (
             <div className="min-h-screen bg-gray-900">
@@ -339,11 +328,7 @@ function App() {
                         href="https://t.me/RouteCabBot">https://t.me/RouteCabBot</a>
                     <br/>
                     <br/>
-                    <GoogleLogin
-                        onSuccess={handleLoginSuccess}
-                        onError={() => alert("Login Failed")}
-                        useOneTap // Optional: enables auto popup for returning users
-                    />
+                    <Modals/>
                 </main>
             </div>
         );

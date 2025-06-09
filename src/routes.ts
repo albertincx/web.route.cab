@@ -103,6 +103,8 @@ export async function loadRoutesFromBackend(): Promise<Route[]> {
 
 const useRoutes = () => {
     const [routes, setRoutes] = useState<Route[] | null>(null);
+    // @ts-ignore
+    const tick = usePStore(state => state.tick);
 
     useEffect(() => {
         async function initRoutes() {
@@ -111,7 +113,7 @@ const useRoutes = () => {
         }
 
         initRoutes();
-    }, []);
+    }, [tick]);
 
     return [routes, setRoutes];
 };

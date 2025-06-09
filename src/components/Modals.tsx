@@ -49,7 +49,7 @@ function Modals() {
         const token = credentialResponse.credential;
         // localStorage.setItem("token", token);
         // Send token to backend
-        const res = await fetch("https://api.route.cab/auth/google", {
+        const res = await fetch((import.meta.env.VITE_API_URL || 'https://api.route.cab') + "/auth/google", {
             method: "POST",
             credentials: "include", // Send/receive cookies
             headers: {
@@ -60,6 +60,8 @@ function Modals() {
         // setGu(res.user);
         keyStorage.sSetJ("user", res.user);
         localStorage.setItem("token", res.token);
+        usePStore.getState().update('modal', null);
+        usePStore.getState().update('tick', new Date());
         // alert("Logged in!");
     };
     console.log('modal')

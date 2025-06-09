@@ -43,10 +43,11 @@ const rootElement = document.getElementById("root");
 if (!rootElement) {
     throw new Error("Failed to find root element");
 }
-
+let gc = '656103703545-c4hm6t31mcm9hl46b4k7ku06ur55k28t.apps.googleusercontent.com';
+// gc = '656103703545-3k2kea50tnedb76884m4m18v4lpv7m44.apps.googleusercontent.com';
 createRoot(rootElement).render(<>
     <I18nextProvider i18n={i18n}>
-        <GoogleOAuthProvider clientId={'656103703545-c4hm6t31mcm9hl46b4k7ku06ur55k28t.apps.googleusercontent.com'}>
+        <GoogleOAuthProvider clientId={gc}>
             <ErrorBoundary>
                 <App/>
             </ErrorBoundary>
