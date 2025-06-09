@@ -626,6 +626,8 @@ function App() {
                     <a
                         className="flex-1 py-3 px-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium"
                         href="https://t.me/RouteCabBot">https://t.me/RouteCabBot</a>
+                    <br/>
+                    <br/>
                     <GoogleLogin
                         onSuccess={handleLoginSuccess}
                         onError={() => alert("Login Failed")}
