@@ -36,7 +36,7 @@ jobs:
             ${{ runner.OS }}-node-
 
       - name: Install dependencies
-        run: pnpm ci
+        run: pnpm i
 
       - name: Build
         run: pnpm run build
