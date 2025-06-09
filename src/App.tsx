@@ -26,6 +26,9 @@ import {getTmaParams} from "./utils";
 import {RouteCard} from "./components/RouteCard";
 import keyStorage from "./utils/storage";
 import {Route, LatLng} from "./utils/types";
+import {NotFoundRoutes} from "./components/NotFoundRoutes";
+import {MyRoutesPage} from "./components/MyRoutesPage";
+import {ProfilePage} from "./components/ProfilePage";
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "/marker-icon-2x.png",
@@ -137,180 +140,6 @@ const RouteDetailsModal: React.FC<any> = ({hide, show, onClose, title, children}
     );
 };
 
-const NotFoundRoutes: React.FC<{ onAddRoute: () => void }> = ({onAddRoute}) => (
-    <div className="text-center py-16">
-        <div className="bg-gray-800 rounded-full p-6 w-24 h-24 mx-auto mb-6 border border-gray-700">
-            <Navigation className="h-12 w-12 text-gray-500 mx-auto"/>
-        </div>
-        <h3 className="text-xl font-semibold text-white mb-3">No routes found</h3>
-        <p className="text-gray-400 mb-8 max-w-md mx-auto">
-            We couldn't find any routes matching your criteria. Try adjusting your filters or be the first to create a
-            route for this area.
-        </p>
-        <button
-            onClick={onAddRoute}
-            className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-6 rounded-lg hover:from-blue-500 hover:to-blue-600 transition-all font-medium inline-flex items-center space-x-2"
-        >
-            <Plus className="h-5 w-5"/>
-            <span>Create First Route</span>
-        </button>
-    </div>
-);
-
-const MyRoutesPage: React.FC<{
-    routes: Route[] | null;
-    onEditRoute: (route: Route) => void;
-    onDeleteRoute: (id: string) => void;
-    onViewRoute: (route: Route) => void;
-}> = ({routes, onEditRoute, onDeleteRoute, onViewRoute}) => {
-    const myRoutes: any[] = [];
-
-    return (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-2xl font-bold text-white mb-2">Routes</h2>
-                    <p className="text-gray-400">Shared routes</p>
-                </div>
-                <div className="text-right">
-                    <div className="text-sm text-gray-400">Total Routes</div>
-                    <div className="text-2xl font-bold text-white">{myRoutes?.length}</div>
-                </div>
-            </div>
-
-            {myRoutes?.length === 0 ? (
-                <div className="text-center py-16">
-                    <div className="bg-gray-800 rounded-full p-6 w-24 h-24 mx-auto mb-6 border border-gray-700">
-                        <Car className="h-12 w-12 text-gray-500 mx-auto"/>
-                    </div>
-                    <h3 className="text-xl font-semibold text-white mb-3">No routes created yet</h3>
-                    <p className="text-gray-400 mb-8 max-w-md mx-auto">
-                        No nearby routes found
-                    </p>
-                </div>
-            ) : (
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {myRoutes?.map(route => (
-                        <RouteCard
-                            key={route.id}
-                            route={route}
-                            onView={() => onViewRoute(route)}
-                            showActions={true}
-                            onEdit={() => onEditRoute(route)}
-                            onDelete={() => onDeleteRoute(route.id)}
-                        />
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-};
-
-const ProfilePage: React.FC<{
-    user: any;
-    viewingUserId?: string;
-    onBack?: () => void;
-}> = ({user, viewingUserId, onBack}) => {
-    const isOwnProfile = false;
-    const displayUser = viewingUserId ? user : user;
-
-    return (
-        <div className="space-y-6">
-            <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 h-24"></div>
-                <div className="p-6 relative">
-                    <div className="absolute -top-12 left-6">
-                        <div
-                            className="w-24 h-24 bg-gray-700 rounded-full border-4 border-gray-800 flex items-center justify-center">
-                            <User className="h-12 w-12 text-gray-300"/>
-                        </div>
-                    </div>
-
-                    <div className="pt-16">
-                        <div className="flex items-start justify-between mb-4">
-                            <div>
-                                <h1 className="text-2xl font-bold text-white mb-1">{displayUser.name}</h1>
-                                <p className="text-gray-400">Member since {displayUser.memberSince}</p>
-                            </div>
-                            {isOwnProfile && (
-                                <button
-                                    className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors inline-flex items-center space-x-2">
-                                    <Edit className="h-4 w-4"/>
-                                    <span>Edit Profile</span>
-                                </button>
-                            )}
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                            <div className="bg-gray-700 rounded-lg p-4 text-center">
-                                <div className="flex items-center justify-center space-x-1 mb-1">
-                                    <Star className="h-5 w-5 text-yellow-400 fill-current"/>
-                                    <span className="text-2xl font-bold text-white">{displayUser.rating}</span>
-                                </div>
-                                <div className="text-sm text-gray-400">Rating</div>
-                            </div>
-                            <div className="bg-gray-700 rounded-lg p-4 text-center">
-                                <div className="text-2xl font-bold text-white mb-1">{displayUser.totalRides}</div>
-                                <div className="text-sm text-gray-400">Total Rides</div>
-                            </div>
-                        </div>
-
-                        {displayUser.bio && (
-                            <div className="mb-6">
-                                <h3 className="text-lg font-medium text-white mb-2">About</h3>
-                                <p className="text-gray-300">{displayUser.bio}</p>
-                            </div>
-                        )}
-
-                        <div className="space-y-3">
-                            <div className="flex items-center space-x-3">
-                                <Phone className="h-5 w-5 text-green-400"/>
-                                <span className="text-gray-300">{displayUser.phone}</span>
-                            </div>
-                            <div className="flex items-center space-x-3">
-                                <User className="h-5 w-5 text-blue-400"/>
-                                <span className="text-gray-300">{displayUser.email}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {isOwnProfile && (
-                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                    <h3 className="text-lg font-medium text-white mb-4">Account Settings</h3>
-                    <div className="space-y-3">
-                        <button
-                            className="w-full flex items-center justify-between p-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
-                            <div className="flex items-center space-x-3">
-                                <Settings className="h-5 w-5"/>
-                                <span>Preferences</span>
-                            </div>
-                            <span className="text-gray-500">›</span>
-                        </button>
-                        <button
-                            className="w-full flex items-center justify-between p-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
-                            <div className="flex items-center space-x-3">
-                                <User className="h-5 w-5"/>
-                                <span>Privacy Settings</span>
-                            </div>
-                            <span className="text-gray-500">›</span>
-                        </button>
-                        <button
-                            className="w-full flex items-center justify-between p-3 text-red-400 hover:bg-red-900/20 rounded-lg transition-colors">
-                            {/*<div className="flex items-center space-x-3">*/}
-                            {/*    <LogOut className="h-5 w-5"/>*/}
-                            {/*    <span>Sign Out</span>*/}
-                            {/*</div>*/}
-                            {/*<span className="text-red-500">›</span>*/}
-                        </button>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-};
-
 const BottomNavigation: React.FC<{
     activeTab: string;
     onTabChange: (tab: string) => void;
@@ -362,8 +191,10 @@ function App() {
     const [viewingProfile, setViewingProfile] = useState<string | null>(null);
     const tma = getTmaParams();
 
-    tma.w = tma.w || gu || keyStorage.sGetJ("user");
+    // tma.w = tma.w || gu || keyStorage.sGetJ("user");
+    let user = (tma.w && tma.w.id ? tma.w : false) || gu || keyStorage.sGetJ("user");
 
+    // console.log(keyStorage.sGetJ("user"))
     useEffect(() => {
         localStorage.setItem("routes", JSON.stringify(routes));
     }, [routes]);
@@ -539,8 +370,9 @@ function App() {
         localStorage.setItem("token", res.token);
         // alert("Logged in!");
     };
-
-    if (!tma.w?.id) {
+    console.log('tma')
+    console.log(tma)
+    if (!user.id) {
         return (
             <div className="min-h-screen bg-gray-900">
                 <Header
@@ -642,7 +474,7 @@ function App() {
 
                     {(activeTab === 'profile' || viewingProfile) && (
                         <ProfilePage
-                            user={tma.w}
+                            user={user}
                             // @ts-ignore
                             viewingUserId={viewingProfile}
                             onBack={handleBack}
