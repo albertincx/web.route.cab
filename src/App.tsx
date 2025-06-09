@@ -18,14 +18,15 @@ import {
 } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import {useTranslation} from 'react-i18next'; // добавляем хук переводов
+import {useTranslation} from 'react-i18next';
 
 import LocationPickerModal from './components/LocationPickerModal';
 import ViewRouteModal from './components/ViewRouteModal';
-import useRoutes, {sendNewRouteToServer} from "./routes";
+import useRoutes, {loadRoutesFromBackend, Route, sendNewRouteToServer} from "./routes";
 import useInitMiniApp from "./hooks/useMiniApp";
 import {AddRouteModal} from "./components/AddRouteModal";
 import {getTmaParams} from "./utils";
+import {RouteCard} from "./components/RouteCard";
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "/marker-icon-2x.png",
@@ -37,25 +38,6 @@ L.Icon.Default.mergeOptions({
 interface LatLng {
     lat: number;
     lng: number;
-}
-
-interface Route {
-    id: string;
-    name: string;
-    start: LatLng;
-    end: LatLng;
-    pointA?: { coordinates: [number, number] };
-    pointB?: { coordinates: [number, number] };
-    days: string[];
-    time: string;
-    seats: number;
-    contact: string;
-    active?: boolean;
-    price?: number;
-    driverName?: string;
-    driverId?: string;
-    rating?: number;
-    totalRides?: number;
 }
 
 interface User {
@@ -80,66 +62,6 @@ const mockCurrentUser: User = {
     memberSince: "January 2023",
     bio: "Friendly driver with 5+ years experience. Love meeting new people and helping with commutes!"
 };
-
-const mockUsers: User[] = [
-    {
-        id: "user-2",
-        name: "Alex Weber",
-        email: "alex.weber@email.com",
-        phone: "+49 123 456 7890",
-        rating: 4.9,
-        totalRides: 203,
-        memberSince: "March 2022"
-    },
-    {
-        id: "user-3",
-        name: "Maria Schmidt",
-        email: "maria.schmidt@email.com",
-        phone: "+49 987 654 3210",
-        rating: 4.7,
-        totalRides: 89,
-        memberSince: "August 2023"
-    }
-];
-
-const mockRoutes: Route[] = [
-    {
-        id: "1",
-        name: "Downtown Express",
-        start: {lat: 52.520008, lng: 13.404954},
-        end: {lat: 52.516275, lng: 13.377704},
-        pointA: {coordinates: [52.520008, 13.404954]},
-        pointB: {coordinates: [52.516275, 13.377704]},
-        days: ["Mon", "Tue", "Wed", "Thu", "Fri"],
-        time: "08:00",
-        seats: 3,
-        contact: "+49 123 456 7890",
-        active: true,
-        price: 15,
-        driverName: "Alex Weber",
-        driverId: "user-2",
-        rating: 4.9,
-        totalRides: 203
-    },
-    {
-        id: "2",
-        name: "Airport Shuttle",
-        start: {lat: 52.559682, lng: 13.287748},
-        end: {lat: 52.520008, lng: 13.404954},
-        pointA: {coordinates: [52.559682, 13.287748]},
-        pointB: {coordinates: [52.520008, 13.404954]},
-        days: ["Mon", "Wed", "Fri"],
-        time: "06:30",
-        seats: 2,
-        contact: "maria.schmidt@email.com",
-        active: true,
-        price: 25,
-        driverName: "Maria Schmidt",
-        driverId: "user-3",
-        rating: 4.7,
-        totalRides: 89
-    }
-];
 
 // Components
 const Header: React.FC<{
@@ -196,123 +118,6 @@ const Header: React.FC<{
         </div>
     </header>
 );
-
-const RouteCard: React.FC<{
-    route: Route;
-    onView: () => void;
-    onViewProfile?: (driverId: string) => void;
-    showActions?: boolean;
-    onEdit?: () => void;
-    onDelete?: () => void;
-}> = ({route, onView, onViewProfile, showActions, onEdit, onDelete}) => {
-    const getStatusColor = (active: boolean) => active ? 'text-emerald-400' : 'text-red-400';
-    const getStatusBg = (active: boolean) => active ? 'bg-emerald-900/30' : 'bg-red-900/30';
-
-    return (
-        <div
-            className="bg-gray-800 rounded-xl shadow-lg border border-gray-700 hover:shadow-xl hover:border-gray-600 transition-all duration-200 overflow-hidden">
-            <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                        <h3 className="font-semibold text-lg text-white mb-1">{route.name}</h3>
-                        <button
-                            onClick={() => onViewProfile && route.driverId && onViewProfile(route.driverId)}
-                            className="text-blue-400 hover:text-blue-300 text-sm mb-2 transition-colors"
-                        >
-                            by {route.driverName}
-                        </button>
-                        <div className="flex items-center space-x-2 mb-2">
-                            <div
-                                className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusBg(route.active || false)} ${getStatusColor(route.active || false)}`}>
-                                <div
-                                    className={`w-2 h-2 rounded-full mr-1 ${route.active ? 'bg-emerald-400' : 'bg-red-400'}`}></div>
-                                {route.active ? 'Active' : 'Inactive'}
-                            </div>
-                            {route.rating && (
-                                <div className="flex items-center space-x-1">
-                                    <Star className="h-3 w-3 text-yellow-400 fill-current"/>
-                                    <span className="text-xs text-gray-400">{route.rating}</span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <div className="flex items-start space-x-2">
-                        {route.price && (
-                            <div className="text-right">
-                                <div className="text-2xl font-bold text-white">€{route.price}</div>
-                                <div className="text-sm text-gray-400">per ride</div>
-                            </div>
-                        )}
-                        {showActions && (
-                            <div className="flex space-x-1">
-                                <button
-                                    onClick={onEdit}
-                                    className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-700 rounded-lg transition-colors"
-                                >
-                                    <Edit className="h-4 w-4"/>
-                                </button>
-                                <button
-                                    onClick={onDelete}
-                                    className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-700 rounded-lg transition-colors"
-                                >
-                                    <Trash2 className="h-4 w-4"/>
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                <div className="space-y-3 mb-4">
-                    <div className="flex items-center space-x-3">
-                        <MapPin className="h-4 w-4 text-green-400 flex-shrink-0"/>
-                        <span className="text-sm text-gray-300">
-                            From: [{route.pointA?.coordinates[0].toFixed(4)}, {route.pointA?.coordinates[1].toFixed(4)}]
-                        </span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                        <MapPin className="h-4 w-4 text-red-400 flex-shrink-0"/>
-                        <span className="text-sm text-gray-300">
-                            To: [{route.pointB?.coordinates[0].toFixed(4)}, {route.pointB?.coordinates[1].toFixed(4)}]
-                        </span>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-4 mb-4">
-                    <div className="flex items-center space-x-2">
-                        <Clock className="h-4 w-4 text-blue-400"/>
-                        <span className="text-sm font-medium text-gray-300">{route.time}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Users className="h-4 w-4 text-purple-400"/>
-                        <span className="text-sm font-medium text-gray-300">{route.seats} seats</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Phone className="h-4 w-4 text-green-400"/>
-                        <span className="text-sm font-medium text-gray-300 truncate">Contact</span>
-                    </div>
-                </div>
-
-                <div className="mb-4">
-                    <div className="flex flex-wrap gap-1">
-                        {route.days?.map(day => (
-                            <span key={day}
-                                  className="px-2 py-1 bg-blue-900/30 text-blue-300 rounded-md text-xs font-medium border border-blue-800">
-                                {day}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-
-                <button
-                    onClick={onView}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2.5 px-4 rounded-lg hover:from-blue-500 hover:to-blue-600 transition-all duration-200 font-medium"
-                >
-                    View Details
-                </button>
-            </div>
-        </div>
-    );
-};
 
 const RouteDetailsModal: React.FC<any> = ({hide, show, onClose, title, children}) => {
     if (!show) return null;
@@ -394,8 +199,8 @@ const MyRoutesPage: React.FC<{
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold text-white mb-2">My Routes</h2>
-                    <p className="text-gray-400">Manage your shared routes</p>
+                    <h2 className="text-2xl font-bold text-white mb-2">Routes</h2>
+                    <p className="text-gray-400">Shared routes</p>
                 </div>
                 <div className="text-right">
                     <div className="text-sm text-gray-400">Total Routes</div>
@@ -410,8 +215,7 @@ const MyRoutesPage: React.FC<{
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">No routes created yet</h3>
                     <p className="text-gray-400 mb-8 max-w-md mx-auto">
-                        Start sharing rides by creating your first route. Help others commute while earning some extra
-                        money.
+                        No nearby routes found
                     </p>
                 </div>
             ) : (
@@ -438,7 +242,7 @@ const ProfilePage: React.FC<{
     onBack?: () => void;
 }> = ({user, viewingUserId, onBack}) => {
     const isOwnProfile = !viewingUserId || viewingUserId === mockCurrentUser.id;
-    const displayUser = viewingUserId ? mockUsers.find(u => u.id === viewingUserId) || user : user;
+    const displayUser = viewingUserId ? user : user;
 
     return (
         <div className="space-y-6">
@@ -524,11 +328,11 @@ const ProfilePage: React.FC<{
                         </button>
                         <button
                             className="w-full flex items-center justify-between p-3 text-red-400 hover:bg-red-900/20 rounded-lg transition-colors">
-                            <div className="flex items-center space-x-3">
-                                <LogOut className="h-5 w-5"/>
-                                <span>Sign Out</span>
-                            </div>
-                            <span className="text-red-500">›</span>
+                            {/*<div className="flex items-center space-x-3">*/}
+                            {/*    <LogOut className="h-5 w-5"/>*/}
+                            {/*    <span>Sign Out</span>*/}
+                            {/*</div>*/}
+                            {/*<span className="text-red-500">›</span>*/}
                         </button>
                     </div>
                 </div>
@@ -543,7 +347,7 @@ const BottomNavigation: React.FC<{
 }> = ({activeTab, onTabChange}) => {
     const tabs = [
         {id: 'routes', icon: Navigation, label: 'Routes'},
-        {id: 'my-routes', icon: Car, label: 'My Routes'},
+        {id: 'my-routes', icon: Car, label: 'Routes'},
         {id: 'profile', icon: User, label: 'Profile'}
     ];
 
@@ -596,6 +400,19 @@ function App() {
             setHeaderMini(window.scrollY > 40);
         };
         window.addEventListener('scroll', onScroll);
+        navigator.geolocation.getCurrentPosition(function (location) {
+            // console.log(location)
+            // console.log(location.coords.latitude)
+            // console.log(location.coords.longitude)
+            setForm((prevForm: any) => ({
+                ...prevForm,
+                start: {
+                    lat: location.coords.latitude,
+                    lng: location.coords.longitude
+                }
+            }));
+        });
+
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
@@ -624,6 +441,8 @@ function App() {
                     setRoutes(prev => [...prev, newRoute as Route]);
                     setShowModal(false);
                     console.log('success')
+                } else {
+                    setForm((prevForm: any) => ({...prevForm, error: 1}));
                 }
             });
         }
@@ -659,12 +478,13 @@ function App() {
 
     const getPageTitle = () => {
         if (viewingProfile && viewingProfile !== mockCurrentUser.id) {
-            const user = mockUsers.find(u => u.id === viewingProfile);
+            const user = {};
+            // @ts-ignore
             return user ? `${user.name}'s Profile` : 'Profile';
         }
         switch (activeTab) {
             case 'my-routes':
-                return 'My Routes';
+                return 'Routes';
             case 'profile':
                 return 'Profile';
             default:
@@ -684,7 +504,7 @@ function App() {
     }
 
     function handleOpen() {
-        setForm({days: [], start: undefined, end: undefined});
+        setForm((prevForm: any) => ({...prevForm, days: []}));
         setShowModal(true);
     }
 
@@ -702,49 +522,49 @@ function App() {
         }
     }
 
-    function handleDayToggle(day: string) {
-        setShowRequired(false);
-        setForm((prevForm: any) => ({
-            ...prevForm,
-            days: prevForm.days.includes(day)
-                ? prevForm.days.filter((d: string) => d !== day)
-                : [...(prevForm.days || []), day],
-        }));
-    }
+    // function handleDayToggle(day: string) {
+    //     setShowRequired(false);
+    //     setForm((prevForm: any) => ({
+    //         ...prevForm,
+    //         days: prevForm.days.includes(day)
+    //             ? prevForm.days.filter((d: string) => d !== day)
+    //             : [...(prevForm.days || []), day],
+    //     }));
+    // }
 
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        if (!form.start || !form.end) {
-            setShowRequired(true);
-            alert(t('required_field_error'));
-            return;
-        }
-        setShowRequired(false);
-        const newRoute: Route = {
-            id: `${Date.now()}-${Math.random()}`,
-            name: form.name || "Route",
-            start: form.start,
-            end: form.end,
-            pointA: {coordinates: [form.start.lat, form.start.lng]},
-            pointB: {coordinates: [form.end.lat, form.end.lng]},
-            days: form.days,
-            time: form.time || "",
-            seats: form.seats || 1,
-            contact: form.contact || "",
-            active: true,
-            driverName: form.driverName || mockCurrentUser.name,
-            driverId: mockCurrentUser.id
-        };
-        // @ts-ignore
-        sendNewRouteToServer(newRoute).then((success) => {
-            // @ts-ignore
-            if (success) {
-                // @ts-ignore
-                setRoutes([...routes, newRoute]);
-                setShowModal(false);
-            }
-        });
-    }
+    // function handleSubmit(e: React.FormEvent) {
+    //     e.preventDefault();
+    //     if (!form.start || !form.end) {
+    //         setShowRequired(true);
+    //         alert(t('required_field_error'));
+    //         return;
+    //     }
+    //     setShowRequired(false);
+    //     const newRoute: Route = {
+    //         id: `${Date.now()}-${Math.random()}`,
+    //         name: form.name || "Route",
+    //         start: form.start,
+    //         end: form.end,
+    //         pointA: {coordinates: [form.start.lat, form.start.lng]},
+    //         pointB: {coordinates: [form.end.lat, form.end.lng]},
+    //         days: form.days,
+    //         time: form.time || "",
+    //         seats: form.seats || 1,
+    //         contact: form.contact || "",
+    //         active: true,
+    //         driverName: form.driverName || mockCurrentUser.name,
+    //         driverId: mockCurrentUser.id
+    //     };
+    //     // @ts-ignore
+    //     sendNewRouteToServer(newRoute).then((success) => {
+    //         // @ts-ignore
+    //         if (success) {
+    //             // @ts-ignore
+    //             setRoutes([...routes, newRoute]);
+    //             setShowModal(false);
+    //         }
+    //     });
+    // }
 
     function openLocationPicker(key: "start" | "end") {
         if (key === "start") {
@@ -798,6 +618,8 @@ function App() {
             </div>
         );
     }
+    console.log(form);
+    let initPoint = {lat: form.start?.lat ?? 52.52, lng: form.start?.lng ?? 13.405};
 
     return (
         <div className="min-h-screen bg-gray-900">
@@ -817,10 +639,9 @@ function App() {
                         <>
                             <div className="mb-8">
                                 <h2 className="text-2xl font-bold text-white mb-2">Available Routes</h2>
-                                <p className="text-gray-400">Find your perfect ride share</p>
+                                {/*<p className="text-gray-400">Find your perfect ride share</p>*/}
                             </div>
                             {routes === null && (
-
                                 <div role="status">
                                     <svg aria-hidden="true"
                                          className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -834,7 +655,6 @@ function App() {
                                     </svg>
                                     <span className="sr-only">Loading...</span>
                                 </div>
-
                             )}
                             {routes?.length === 0 ? (
                                 <NotFoundRoutes onAddRoute={handleOpen}/>
@@ -876,6 +696,7 @@ function App() {
                 </div>
             </main>
             <RouteDetailsModal
+                title={editingRoute ? 'Edit Route' : 'Add New Route'}
                 show={showModal}
                 onClose={handleClose}
                 // route={selectedRoute}
@@ -907,7 +728,12 @@ function App() {
                     show={!!selectedRoute}
                     // @ts-ignore
                     route={selectedRoute}
-                    // onClose={() => setShowDetailsModal(null)}
+                    onClose={() => setShowDetailsModal(false)}
+                    onUpdate={async () => {
+                        const backendRoutes = await loadRoutesFromBackend();
+                        // @ts-ignore
+                        setRoutes(backendRoutes);
+                    }}
                 />
             </RouteDetailsModal>
 
@@ -920,7 +746,7 @@ function App() {
                 >
                     <LocationPickerModal
                         show={isChoosingStart}
-                        initialPosition={{lat: form.start?.lat ?? 52.52, lng: form.start?.lng ?? 13.405}}
+                        initialPosition={initPoint}
                         onChoose={(latlng) => chooseLocation('start', latlng)}
                         // onCancel={closeLocationPicker}
                     />
@@ -935,7 +761,7 @@ function App() {
                 >
                     <LocationPickerModal
                         show={isChoosingEnd}
-                        initialPosition={{lat: form.end?.lat ?? 52.52, lng: form.end?.lng ?? 13.405}}
+                        initialPosition={initPoint}
                         onChoose={(latlng) => chooseLocation('end', latlng)}
                     />
                 </RouteDetailsModal>

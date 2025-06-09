@@ -25,6 +25,8 @@ export const AddRouteModal: React.FC<Props> = ({
                                                    renderErrorMessage,
                                                    openLocationPicker
                                                }) => {
+    const [lo, setLo] = useState<boolean>(false);
+
     const [form, setForm] = useState<any>({
         name: '',
         days: [] as string[],
@@ -35,6 +37,7 @@ export const AddRouteModal: React.FC<Props> = ({
         driverName: ''
     });
     console.log(_form)
+
     useEffect(() => {
         if (_form.start) {
             let key = 'start';
@@ -44,7 +47,11 @@ export const AddRouteModal: React.FC<Props> = ({
             let key = 'end';
             setForm((prevForm: any) => ({...prevForm, [key]: _form.end}));
         }
+        if (_form.error) {
+            setLo(false)
+        }
     }, [_form]);
+
     useEffect(() => {
         if (editRoute) {
             setForm({
@@ -71,6 +78,8 @@ export const AddRouteModal: React.FC<Props> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setLo(true);
+        // console.log('submit')
         if (
             !form.name || !form.time || !form.contact
             || form.days.length === 0
@@ -80,6 +89,9 @@ export const AddRouteModal: React.FC<Props> = ({
             let keys = ['name', 'time', 'contact', 'days', 'start', 'end'];
             let missing = keys.filter(key => !form[key]);
             console.log(missing)
+            if (form.days.length === 0) {
+                missing.push('days');
+            }
             alert(`Please fill in all required fields ${missing.join(', ')}`);
             return;
         }
@@ -88,8 +100,8 @@ export const AddRouteModal: React.FC<Props> = ({
             id: editRoute?.id || `${Date.now()}-${Math.random()}`,
             start: {lat: 52.520008, lng: 13.404954},
             end: {lat: 52.516275, lng: 13.377704},
-            pointA: {coordinates: [52.520008, 13.404954]},
-            pointB: {coordinates: [52.516275, 13.377704]},
+            pointA: {coordinates: [form.start.lat, form.start.lng]},
+            pointB: {coordinates: [form.end.lat, form.end.lng]},
             active: true,
             // driverId: mockCurrentUser.id
         });
@@ -118,12 +130,6 @@ export const AddRouteModal: React.FC<Props> = ({
             <div>
                 <form onSubmit={handleSubmit}>
                     <div className="p-6_ flex-1 overflow-y-auto_">
-                        <div className="flex flex-shrink-0 items-center justify-between mb-6">
-                            <h2 className="text-2xl font-bold text-white">
-                                {editRoute ? 'Edit Route' : 'Add New Route'}
-                            </h2>
-                        </div>
-
                         <div className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -140,6 +146,70 @@ export const AddRouteModal: React.FC<Props> = ({
                                 />
                             </div>
 
+                            <div>
+                                <label
+                                    className="block mb-1 font-medium">
+                                    {t('start_location_label')}
+                                    <span className="text-red-400">*</span>
+                                </label>
+                                <button
+                                    type="button"
+                                    className={`py-2 px-4 rounded-md focus:outline-none transition-colors duration-150 ring-offset-2 focus:ring-2 focus:ring-blue-500 ${!form.start ? 'border-red-500' : 'border-gray-300'}`}
+                                    onClick={() => openLocationPicker('start')}
+                                >
+                                    {t('select_start_location_button')}
+                                </button>
+                                <input
+                                    className={'flex max-h-[1px] max-w-[1px] ml-[90px]'}
+                                    type="text"
+                                    // style={{display: 'none'}}
+                                    tabIndex={-1} required
+                                    value={form.start?.lat ? '1' : ''}
+                                    // placeholder={'s'}
+                                    // readOnly
+                                />
+                                {renderErrorMessage('start')}
+                                {form.start ? (
+                                    <div className="text-green-700 text-sm">
+                                        Selected: [{form.start.lat.toFixed(5)}, {form.start.lng.toFixed(5)}]
+                                    </div>
+                                ) : (
+                                    <div
+                                        className="text-gray-600 text-sm">{t('select_start_location_button')}.</div>
+                                )}
+                            </div>
+
+                            <div>
+                                <label className="block mb-1 font-medium">
+                                    {t('end_location_label')}
+                                    <span className="text-red-400">*</span>
+                                </label>
+                                <button
+                                    type="button"
+                                    className={`py-2 px-4 rounded-md focus:outline-none transition-colors duration-150 ring-offset-2 focus:ring-2 focus:ring-blue-500 ${!form.end ? 'border-red-500' : 'border-gray-300'}`}
+                                    onClick={() => openLocationPicker('end')}
+                                >
+                                    {t('select_end_location_button')}
+                                </button>
+                                <input
+                                    className={'flex max-h-[1px] max-w-[1px] ml-[90px]'}
+                                    type="text"
+                                    // style={{display: 'none'}}
+                                    tabIndex={-1} required
+                                    value={form.end?.lat ? '1' : ''}
+                                    // placeholder={'s'}
+                                    // readOnly
+                                />
+                                {renderErrorMessage('end')}
+                                {form.end ? (
+                                    <div className="text-green-700 text-sm">
+                                        Selected: [{form.end?.lat.toFixed(5)}, {form.end?.lng?.toFixed(5)}]
+                                    </div>
+                                ) : (
+                                    <div
+                                        className="text-gray-600 text-sm">{t('select_end_location_button')}.</div>
+                                )}
+                            </div>
                             {/*<div>*/}
                             {/*    <label className="block text-sm font-medium text-gray-300 mb-2">*/}
                             {/*        Driver Name <span className="text-red-400">*</span>*/}
@@ -174,6 +244,15 @@ export const AddRouteModal: React.FC<Props> = ({
                                         </button>
                                     ))}
                                 </div>
+                                <input
+                                    className={'flex max-h-[1px] max-w-[1px] ml-[90px]'}
+                                    type="text"
+                                    // style={{display: 'none'}}
+                                    tabIndex={-1} required
+                                    value={form.days?.length ? '1' : ''}
+                                    // placeholder={'s'}
+                                    // readOnly
+                                />
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
@@ -250,50 +329,6 @@ export const AddRouteModal: React.FC<Props> = ({
                                     <h2 className="text-xl font-semibold mb-4">{t('modal_title')}</h2>
                                 </div>
                             </div>
-                            <input type="checkbox" style={{display: 'none'}} tabIndex={-1} required
-                                   checked={!!form.start && !!form.end} readOnly/>
-
-                            <div>
-                                <label
-                                    className="block mb-1 font-medium">{t('start_location_label')}</label>
-                                <button
-                                    type="button"
-                                    className={`py-2 px-4 rounded-md focus:outline-none transition-colors duration-150 ring-offset-2 focus:ring-2 focus:ring-blue-500 ${!form.start ? 'border-red-500' : 'border-gray-300'}`}
-                                    onClick={() => openLocationPicker('start')}
-                                >
-                                    {t('select_start_location_button')}
-                                </button>
-                                {renderErrorMessage('start')}
-                                {form.start ? (
-                                    <div className="text-green-700 text-sm">
-                                        Selected: [{form.start.lat.toFixed(5)}, {form.start.lng.toFixed(5)}]
-                                    </div>
-                                ) : (
-                                    <div
-                                        className="text-gray-600 text-sm">{t('select_start_location_button')}.</div>
-                                )}
-                            </div>
-
-                            <div>
-                                <label className="block mb-1 font-medium">{t('end_location_label')}</label>
-                                <button
-                                    type="button"
-                                    className={`py-2 px-4 rounded-md focus:outline-none transition-colors duration-150 ring-offset-2 focus:ring-2 focus:ring-blue-500 ${!form.end ? 'border-red-500' : 'border-gray-300'}`}
-                                    onClick={() => openLocationPicker('end')}
-                                >
-                                    {t('select_end_location_button')}
-                                </button>
-                                {renderErrorMessage('end')}
-                                {form.end ? (
-                                    <div className="text-green-700 text-sm">
-                                        Selected: [{form.end?.lat.toFixed(5)}, {form.end?.lng?.toFixed(5)}]
-                                    </div>
-                                ) : (
-                                    <div
-                                        className="text-gray-600 text-sm">{t('select_end_location_button')}.</div>
-                                )}
-                            </div>
-
                             {/*<div>*/}
                             {/*    <label className="block mb-1 font-medium">{t('days_active_label')}</label>*/}
                             {/*    <div className="grid grid-cols-3 md:grid-cols-4 gap-2">*/}
@@ -376,7 +411,8 @@ export const AddRouteModal: React.FC<Props> = ({
                             {/*        {t('cancel')}*/}
                             {/*    </button>*/}
                             {/*</div>*/}
-                            <div className="flex gap-3 pt-4">
+                            <div
+                                className="btns flex gap-3 pt-4 sticky bottom-0 left-0 right-0 bg-gray-800 z-20 pb-4 border-t border-gray-700 shadow-lg">
                                 <button
                                     type="button"
                                     onClick={onClose}
@@ -385,14 +421,15 @@ export const AddRouteModal: React.FC<Props> = ({
                                     Cancel
                                 </button>
                                 <button
+                                    disabled={lo}
                                     type="submit"
-                                    className="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-500 hover:to-blue-600 transition-all font-medium"
+                                    className={
+                                        "flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-500 hover:to-blue-600 transition-all font-medium"
+                                        + (lo ? ' opacity-50 cursor-not-allowed disabled' : '')}
                                 >
                                     {editRoute ? 'Update Route' : 'Add Route'}
                                 </button>
                             </div>
-                            <br/>
-                            <br/>
                         </div>
                     </div>
                 </form>

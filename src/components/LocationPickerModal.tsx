@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+
+import 'leaflet/dist/leaflet.css';
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "/marker-icon-2x.png",
@@ -13,11 +14,11 @@ interface Props {
     show: boolean;
     initialPosition: { lat: number; lng: number };
     onChoose: (position: { lat: number; lng: number }) => void;
-};
+}
 
 const LocationPickerModal = ({ show, initialPosition, onChoose }: Props) => {
     if (!show) return null;
-
+    // console.log(initialPosition);
     return (
         <div>
             <div className="rounded-lg shadow max-w-md w-full relative max-h-[90vh] overflow-y-auto">
