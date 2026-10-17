@@ -28,3 +28,4 @@ dist-ssr
 /demo/
 yarn.lock
 logs/
+pnpm-lock.yaml
