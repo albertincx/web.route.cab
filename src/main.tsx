@@ -8,6 +8,8 @@ import i18n from './i18n'; // импортируем конфигурирова�
 import App from "./App";
 import React from "react";
 
+import './app.js'
+
 class ErrorBoundary extends React.Component {
     // @ts-ignore
     constructor(props) {
