@@ -1,0 +1,7 @@
+include: [
+  "dist",
+  "dist/assets",
+  "dist/index.html",
+  "policy.html",
+  "terms.html",
+]
