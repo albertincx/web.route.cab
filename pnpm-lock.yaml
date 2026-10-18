@@ -23,42 +23,12 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.8
         version: 4.1.8(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1))
-      '@telegram-apps/sdk':
-        specifier: ^3.10.0
-        version: 3.10.0(typescript@5.8.3)
-      i18next:
-        specifier: ^25.2.1
-        version: 25.2.1(typescript@5.8.3)
-      i18next-browser-languagedetector:
-        specifier: ^8.1.0
-        version: 8.1.0
-      leaflet:
-        specifier: ^1.9.4
-        version: 1.9.4
-      leaflet-routing-machine:
-        specifier: ^3.2.12
-        version: 3.2.12
-      lucide-react:
-        specifier: ^0.513.0
-        version: 0.513.0(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
       react-dom:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
-      react-i18next:
-        specifier: ^15.5.2
-        version: 15.5.2(i18next@25.2.1(typescript@5.8.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
-      react-leaflet:
-        specifier: 5.0.0
-        version: 5.0.0(leaflet@1.9.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      tailwindcss-animate:
-        specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@4.1.8)
-      zustand:
-        specifier: ^5.0.5
-        version: 5.0.5(@types/react@19.1.6)(react@19.1.0)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -66,9 +36,6 @@ importers:
       '@eslint/js':
         specifier: ^9.28.0
         version: 9.28.0
-      '@types/leaflet':
-        specifier: ^1.9.18
-        version: 1.9.18
       '@types/react':
         specifier: ^19.1.6
         version: 19.1.6
@@ -209,10 +176,6 @@ packages:
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
-
-  '@babel/runtime@7.27.6':
-    resolution: {integrity: sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==}
-    engines: {node: '>=6.9.0'}
 
   '@babel/template@7.27.2':
     resolution: {integrity: sha512-LPDZ85aEJyYSd18/DkjNh4/y1ntkE5KwUHWTiqgRxruuZL2F1yuHligVHLvcHY2vMHXttKFpJn6LwfI7cw7ODw==}
@@ -518,13 +481,6 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@mapbox/corslite@0.0.7':
-    resolution: {integrity: sha512-w/uS474VFjmqQ7fFWIMZINQM1BAQxDLuoJaZZIPES1BmeYpCtlh9MtbFxKGGDAsfvut8/HircIsVvEYRjQ+iMg==}
-
-  '@mapbox/polyline@0.2.0':
-    resolution: {integrity: sha512-GCddO0iw6AzOQqZgBmjEQI9Pgo40/yRgkTkikGctE01kNBN0ThWYuAnTD+hRWrAWMV6QJ0rNm4m8DAsaAXE7Pg==}
-    hasBin: true
-
   '@napi-rs/wasm-runtime@0.2.11':
     resolution: {integrity: sha512-9DPkXtvHydrcOsopiYpUgPHpmj0HWZKMUnL2dZqpvC42lsratuBG06V5ipyno0fUek5VlFsNQ+AcFATSrJXgMA==}
 
@@ -539,13 +495,6 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
-
-  '@react-leaflet/core@3.0.0':
-    resolution: {integrity: sha512-3EWmekh4Nz+pGcr+xjf0KNyYfC3U2JjnkWsh0zcqaexYqmmB5ZhH37kz41JXGmKzpaMZCnPofBBm64i+YrEvGQ==}
-    peerDependencies:
-      leaflet: ^1.9.0
-      react: ^19.0.0
-      react-dom: ^19.0.0
 
   '@react-oauth/google@0.12.2':
     resolution: {integrity: sha512-d1GVm2uD4E44EJft2RbKtp8Z1fp/gK8Lb6KHgs3pHlM0PxCXGLaq8LLYQYENnN4xPWO1gkL4apBtlPKzpLvZwg==}
@@ -749,39 +698,6 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6
 
-  '@telegram-apps/bridge@1.9.2':
-    resolution: {integrity: sha512-SJLcNWLXhbbZr9MiqFH/g2ceuitSJKMxUIZysK4zUNyTUNuonrQG80Q/yrO+XiNbKUj8WdDNM86NBARhuyyinQ==}
-
-  '@telegram-apps/bridge@2.8.2':
-    resolution: {integrity: sha512-DpdvK1FUSklQFRaqV84rzhxUU/Pe6tVW497CtUfUZ87wenf/NY8Tvd5GONTJpAVb+H7wGcEcolielLOq1dSV5g==}
-
-  '@telegram-apps/navigation@1.0.13':
-    resolution: {integrity: sha512-TsUueB5LQp77GQHoMa93nq26Uw7GJjrFCPbyseMVU7aBBxAc+8CV2IYytRwcVp5sv/q7ThK5X4JaKn2V1yBHDQ==}
-
-  '@telegram-apps/sdk@3.10.0':
-    resolution: {integrity: sha512-LD7mk0STzFGh2Qws2cyTAudLaAb4cT8nUJDBCdaBitLjmndru13UZHjsU9dzZCD9jpeJmqaQjhHNjtRHMithTg==}
-
-  '@telegram-apps/signals@1.1.1':
-    resolution: {integrity: sha512-vz37r8lemGpPzDiBRfqpXYBynzmy3SFnY6zfHsTZABTYYt0b0WQZyU5mFDqqqugGhka78Gy11xmr9csgy4YgGA==}
-
-  '@telegram-apps/toolkit@1.1.1':
-    resolution: {integrity: sha512-+vhKx6ngfvjyTE6Xagl3z1TPVbfx5s7xAkcYzCdHYUo6T60jLIqLgyZMcI1UPoIAMuMu1pHoO+p8QNCj/+tFmw==}
-
-  '@telegram-apps/toolkit@2.1.2':
-    resolution: {integrity: sha512-iAPjn7RNVEm4o+LPJg1mYv7eDOnCatVEvep7JT74awTt3tn8pVpTYeUbDIFBuOF2BRSIzUgPUYQgVhQcDFTpUg==}
-
-  '@telegram-apps/transformers@1.2.2':
-    resolution: {integrity: sha512-vvMwXckd1D7Ozc0h66PSUwF5QLrRV9HlGJFFeBuUex8QEk5mSPtsJkLiqB8aBbwuFDa91+TUSM/CxqPZO/e9YQ==}
-
-  '@telegram-apps/transformers@2.2.3':
-    resolution: {integrity: sha512-CFQqs7iXw6yuUMBzU1/W/EGW6RlrO0ZViJGFa0ButyHVxOnmM+d5vJmlAiqBFtnUutK9Q2GfbHZoGLW8qSs5YQ==}
-
-  '@telegram-apps/types@1.2.1':
-    resolution: {integrity: sha512-so4HLh7clur0YyMthi9KVIgWoGpZdXlFOuQjk3+Q5NAvJZ11nAheBSwPlGw/Ko92+zwvrSBE/lQyN2+p17RP+w==}
-
-  '@telegram-apps/types@2.0.0':
-    resolution: {integrity: sha512-yF499FJK82a2IDNDAQdrmVH3sgFZl/QFNdVZKgWpgtunIVJ1fres5wi9+4aUBRVIdQwZOZZqB/AOvYYuYXsq3Q==}
-
   '@tybys/wasm-util@0.9.0':
     resolution: {integrity: sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw==}
 
@@ -803,17 +719,11 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
-  '@types/geojson@7946.0.16':
-    resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
-
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
-
-  '@types/leaflet@1.9.18':
-    resolution: {integrity: sha512-ht2vsoPjezor5Pmzi5hdsA7F++v5UGq9OlUduWHmMZiuQGIpJ2WS5+Gg9HaAA79gNh1AIPtCqhzejcIZ3lPzXQ==}
 
   '@types/react-dom@19.1.6':
     resolution: {integrity: sha512-4hOiT/dwO8Ko0gV1m/TJZYk3y0KBnY9vzDh7W+DH17b2HFSOGgdj33dhihPeuy3l0q23+4e+hoXHV6hCC4dCXw==}
@@ -1043,9 +953,6 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  better-promises@0.4.1:
-    resolution: {integrity: sha512-cDW7eMvhvCoWzSih5o/OxsAgTUfP05yGMq77xNZUTmcZoNU9vEeFZJ+yJJi4lnocvxFrVFKsG0Yxt7ZnuYJEig==}
-
   brace-expansion@1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
 
@@ -1166,9 +1073,6 @@ packages:
   enhanced-resolve@5.18.1:
     resolution: {integrity: sha512-ZSW3ma5GkcQBIpwZTSRAI8N71Uuwgs93IezB7mf7R60tC8ZbJideoDNKjHn2O9KIlx6rkGTTEk1xUCK2E1Y2Yg==}
     engines: {node: '>=10.13.0'}
-
-  error-kid@0.0.7:
-    resolution: {integrity: sha512-8mFs7ZaDWlBFgjOy4lHLMCe2+KZfZXGx5GOgh2VQ/M1CCIvSWzbl2OMl+5fdZgrgoUfhTeF+NPhmqfEvUhN8yw==}
 
   es-abstract@1.24.0:
     resolution: {integrity: sha512-WSzPgsdLtTcQwm4CROfS5ju2Wa1QQcVeT37jFjYzdFz1r9ahadC8B8/a4qxJxM+09F18iumCdRmlr96ZYkQvEg==}
@@ -1481,20 +1385,6 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
-  html-parse-stringify@3.0.1:
-    resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
-
-  i18next-browser-languagedetector@8.1.0:
-    resolution: {integrity: sha512-mHZxNx1Lq09xt5kCauZ/4bsXOEA2pfpwSoU11/QTJB+pD94iONFwp+ohqi///PwiFvjFOxe1akYCdHyFo1ng5Q==}
-
-  i18next@25.2.1:
-    resolution: {integrity: sha512-+UoXK5wh+VlE1Zy5p6MjcvctHXAhRwQKCxiJD8noKZzIXmnAX8gdHX5fLPA3MEVxEN4vbZkQFy8N0LyD9tUqPw==}
-    peerDependencies:
-      typescript: ^5
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
@@ -1669,12 +1559,6 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  leaflet-routing-machine@3.2.12:
-    resolution: {integrity: sha512-HLde58G1YtD9xSIzZavJ6BPABZaV1hHeGst8ouhzuxmSC3s32NVtADT+njbIUMW1maHRCrsgTk/E4hz5QH7FrA==}
-
-  leaflet@1.9.4:
-    resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
-
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
@@ -1757,11 +1641,6 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@0.513.0:
-    resolution: {integrity: sha512-CJZKq2g8Y8yN4Aq002GahSXbG2JpFv9kXwyiOAMvUBv7pxeOFHUWKB0mO7MiY4ZVFCV4aNjv2BJFq/z3DgKPQg==}
-    peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
 
@@ -1794,9 +1673,6 @@ packages:
   minizlib@3.0.2:
     resolution: {integrity: sha512-oG62iEk+CYt5Xj2YqI5Xi9xWUeZhDI8jjQmC5oThVH5JGCTgIjr7ciJDzC7MBzYd//WvR1OTmP5Q38Q8ShQtVA==}
     engines: {node: '>= 18'}
-
-  mitt@3.0.1:
-    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
 
   mkdirp@3.0.1:
     resolution: {integrity: sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==}
@@ -1861,9 +1737,6 @@ packages:
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
-
-  osrm-text-instructions@0.13.4:
-    resolution: {integrity: sha512-ge4ZTIetMQKAHKq2MwWf83ntzdJN20ndRKRaVNoZ3SkDkBNO99Qddz7r6+hrVx38I+ih6Rk5T1yslczAB6Q9Pg==}
 
   own-keys@1.0.1:
     resolution: {integrity: sha512-qFOyK5PjiWZd+QQIh+1jhdb9LpxTF0qs7Pm8o5QHYZ0M3vKqSqzsZaEB6oWlxZ+q2sJBMI/Ktgd2N5ZwQoRHfg==}
@@ -1993,31 +1866,8 @@ packages:
     peerDependencies:
       react: ^19.1.0
 
-  react-i18next@15.5.2:
-    resolution: {integrity: sha512-ePODyXgmZQAOYTbZXQn5rRsSBu3Gszo69jxW6aKmlSgxKAI1fOhDwSu6bT4EKHciWPKQ7v7lPrjeiadR6Gi+1A==}
-    peerDependencies:
-      i18next: '>= 23.2.3'
-      react: '>= 16.8.0'
-      react-dom: '*'
-      react-native: '*'
-      typescript: ^5
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-      typescript:
-        optional: true
-
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
-
-  react-leaflet@5.0.0:
-    resolution: {integrity: sha512-CWbTpr5vcHw5bt9i4zSlPEVQdTVcML390TjeDG0cK59z1ylexpqC6M1PJFjV8jD7CF+ACBFsLIDs6DRMoLEofw==}
-    peerDependencies:
-      leaflet: ^1.9.0
-      react: ^19.0.0
-      react-dom: ^19.0.0
 
   react-refresh@0.17.0:
     resolution: {integrity: sha512-z6F7K9bV85EfseRCp2bzrpyQ0Gkw1uLoCel9XBVWPg/TjRj94SkJzUTGfOa4bs7iJvBWtQG0Wq7wnI0syw3EBQ==}
@@ -2170,11 +2020,6 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  tailwindcss-animate@1.0.7:
-    resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
-    peerDependencies:
-      tailwindcss: '>=3.0.0 || insiders'
-
   tailwindcss@4.1.8:
     resolution: {integrity: sha512-kjeW8gjdxasbmFKpVGrGd5T4i40mV5J2Rasw48QARfYeQ8YS9x02ON9SFWax3Qf616rt4Cp3nVNIj6Hd1mP3og==}
 
@@ -2254,22 +2099,6 @@ packages:
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
-  valibot@1.0.0:
-    resolution: {integrity: sha512-1Hc0ihzWxBar6NGeZv7fPLY0QuxFMyxwYR2sF1Blu7Wq7EnremwY2W02tit2ij2VJT8HcSkHAQqmFfl77f73Yw==}
-    peerDependencies:
-      typescript: '>=5'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
-  valibot@1.0.0-beta.14:
-    resolution: {integrity: sha512-tLyV2rE5QL6U29MFy3xt4AqMrn+/HErcp2ZThASnQvPMwfSozjV1uBGKIGiegtZIGjinJqn0SlBdannf18wENA==}
-    peerDependencies:
-      typescript: '>=5'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   vite@6.3.5:
     resolution: {integrity: sha512-cZn6NDFE7wdTpINgs++ZJ4N49W2vRp8LCKrn3Ob1kYNtOo21vfDoaV5GzBfLU4MovSAB8uNRm4jgzVQZ+mBzPQ==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
@@ -2310,10 +2139,6 @@ packages:
       yaml:
         optional: true
 
-  void-elements@3.1.0:
-    resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
-    engines: {node: '>=0.10.0'}
-
   which-boxed-primitive@1.1.1:
     resolution: {integrity: sha512-TbX3mj8n0odCBFVlY8AxkqcHASw3L60jIuF8jFP78az3C2YhmGvqbHBpAjTRH2/xqYunrJ9g1jSyjCjpoWzIAA==}
     engines: {node: '>= 0.4'}
@@ -2349,24 +2174,6 @@ packages:
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
-
-  zustand@5.0.5:
-    resolution: {integrity: sha512-mILtRfKW9xM47hqxGIxCv12gXusoY/xTSHBYApXozR0HmQv299whhBeeAcRy+KrPPybzosvJBCOmVjq6x12fCg==}
-    engines: {node: '>=12.20.0'}
-    peerDependencies:
-      '@types/react': '>=18.0.0'
-      immer: '>=9.0.6'
-      react: '>=18.0.0'
-      use-sync-external-store: '>=1.2.0'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      immer:
-        optional: true
-      react:
-        optional: true
-      use-sync-external-store:
-        optional: true
 
 snapshots:
 
@@ -2461,8 +2268,6 @@ snapshots:
     dependencies:
       '@babel/core': 7.27.4
       '@babel/helper-plugin-utils': 7.27.1
-
-  '@babel/runtime@7.27.6': {}
 
   '@babel/template@7.27.2':
     dependencies:
@@ -2691,10 +2496,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@mapbox/corslite@0.0.7': {}
-
-  '@mapbox/polyline@0.2.0': {}
-
   '@napi-rs/wasm-runtime@0.2.11':
     dependencies:
       '@emnapi/core': 1.4.3
@@ -2713,12 +2514,6 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
-
-  '@react-leaflet/core@3.0.0(leaflet@1.9.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
-    dependencies:
-      leaflet: 1.9.4
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
 
   '@react-oauth/google@0.12.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
@@ -2860,69 +2655,6 @@ snapshots:
       tailwindcss: 4.1.8
       vite: 6.3.5(jiti@2.4.2)(lightningcss@1.30.1)
 
-  '@telegram-apps/bridge@1.9.2':
-    dependencies:
-      '@telegram-apps/signals': 1.1.1
-      '@telegram-apps/toolkit': 1.1.1
-      '@telegram-apps/transformers': 1.2.2
-      '@telegram-apps/types': 1.2.1
-
-  '@telegram-apps/bridge@2.8.2(typescript@5.8.3)':
-    dependencies:
-      '@telegram-apps/signals': 1.1.1
-      '@telegram-apps/toolkit': 2.1.2
-      '@telegram-apps/transformers': 2.2.3(typescript@5.8.3)
-      '@telegram-apps/types': 2.0.0
-      better-promises: 0.4.1
-      error-kid: 0.0.7
-      mitt: 3.0.1
-      valibot: 1.0.0(typescript@5.8.3)
-    transitivePeerDependencies:
-      - typescript
-
-  '@telegram-apps/navigation@1.0.13':
-    dependencies:
-      '@telegram-apps/bridge': 1.9.2
-      '@telegram-apps/signals': 1.1.1
-      '@telegram-apps/toolkit': 1.1.1
-
-  '@telegram-apps/sdk@3.10.0(typescript@5.8.3)':
-    dependencies:
-      '@telegram-apps/bridge': 2.8.2(typescript@5.8.3)
-      '@telegram-apps/navigation': 1.0.13
-      '@telegram-apps/signals': 1.1.1
-      '@telegram-apps/toolkit': 2.1.2
-      '@telegram-apps/transformers': 2.2.3(typescript@5.8.3)
-      '@telegram-apps/types': 2.0.0
-      better-promises: 0.4.1
-      error-kid: 0.0.7
-      valibot: 1.0.0(typescript@5.8.3)
-    transitivePeerDependencies:
-      - typescript
-
-  '@telegram-apps/signals@1.1.1': {}
-
-  '@telegram-apps/toolkit@1.1.1': {}
-
-  '@telegram-apps/toolkit@2.1.2': {}
-
-  '@telegram-apps/transformers@1.2.2':
-    dependencies:
-      '@telegram-apps/toolkit': 1.1.1
-      '@telegram-apps/types': 1.2.1
-
-  '@telegram-apps/transformers@2.2.3(typescript@5.8.3)':
-    dependencies:
-      '@telegram-apps/toolkit': 2.1.2
-      '@telegram-apps/types': 2.0.0
-      valibot: 1.0.0-beta.14(typescript@5.8.3)
-    transitivePeerDependencies:
-      - typescript
-
-  '@telegram-apps/types@1.2.1': {}
-
-  '@telegram-apps/types@2.0.0': {}
-
   '@tybys/wasm-util@0.9.0':
     dependencies:
       tslib: 2.8.1
@@ -2953,15 +2685,9 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
-  '@types/geojson@7946.0.16': {}
-
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
-
-  '@types/leaflet@1.9.18':
-    dependencies:
-      '@types/geojson': 7946.0.16
 
   '@types/react-dom@19.1.6(@types/react@19.1.6)':
     dependencies:
@@ -3232,10 +2958,6 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  better-promises@0.4.1:
-    dependencies:
-      error-kid: 0.0.7
-
   brace-expansion@1.1.11:
     dependencies:
       balanced-match: 1.0.2
@@ -3360,8 +3082,6 @@ snapshots:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.2.2
-
-  error-kid@0.0.7: {}
 
   es-abstract@1.24.0:
     dependencies:
@@ -3810,20 +3530,6 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  html-parse-stringify@3.0.1:
-    dependencies:
-      void-elements: 3.1.0
-
-  i18next-browser-languagedetector@8.1.0:
-    dependencies:
-      '@babel/runtime': 7.27.6
-
-  i18next@25.2.1(typescript@5.8.3):
-    dependencies:
-      '@babel/runtime': 7.27.6
-    optionalDependencies:
-      typescript: 5.8.3
-
   ignore@5.3.2: {}
 
   ignore@7.0.5: {}
@@ -3998,14 +3704,6 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  leaflet-routing-machine@3.2.12:
-    dependencies:
-      '@mapbox/corslite': 0.0.7
-      '@mapbox/polyline': 0.2.0
-      osrm-text-instructions: 0.13.4
-
-  leaflet@1.9.4: {}
-
   levn@0.4.1:
     dependencies:
       prelude-ls: 1.2.1
@@ -4070,10 +3768,6 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@0.513.0(react@19.1.0):
-    dependencies:
-      react: 19.1.0
-
   magic-string@0.30.17:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -4102,8 +3796,6 @@ snapshots:
   minizlib@3.0.2:
     dependencies:
       minipass: 7.1.2
-
-  mitt@3.0.1: {}
 
   mkdirp@3.0.1: {}
 
@@ -4170,8 +3862,6 @@ snapshots:
       type-check: 0.4.0
       word-wrap: 1.2.5
 
-  osrm-text-instructions@0.13.4: {}
-
   own-keys@1.0.1:
     dependencies:
       get-intrinsic: 1.3.0
@@ -4235,24 +3925,7 @@ snapshots:
       react: 19.1.0
       scheduler: 0.26.0
 
-  react-i18next@15.5.2(i18next@25.2.1(typescript@5.8.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3):
-    dependencies:
-      '@babel/runtime': 7.27.6
-      html-parse-stringify: 3.0.1
-      i18next: 25.2.1(typescript@5.8.3)
-      react: 19.1.0
-    optionalDependencies:
-      react-dom: 19.1.0(react@19.1.0)
-      typescript: 5.8.3
-
   react-is@16.13.1: {}
-
-  react-leaflet@5.0.0(leaflet@1.9.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
-    dependencies:
-      '@react-leaflet/core': 3.0.0(leaflet@1.9.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      leaflet: 1.9.4
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
 
   react-refresh@0.17.0: {}
 
@@ -4470,10 +4143,6 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  tailwindcss-animate@1.0.7(tailwindcss@4.1.8):
-    dependencies:
-      tailwindcss: 4.1.8
-
   tailwindcss@4.1.8: {}
 
   tapable@2.2.2: {}
@@ -4598,14 +4267,6 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  valibot@1.0.0(typescript@5.8.3):
-    optionalDependencies:
-      typescript: 5.8.3
-
-  valibot@1.0.0-beta.14(typescript@5.8.3):
-    optionalDependencies:
-      typescript: 5.8.3
-
   vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1):
     dependencies:
       esbuild: 0.25.5
@@ -4618,8 +4279,6 @@ snapshots:
       fsevents: 2.3.3
       jiti: 2.4.2
       lightningcss: 1.30.1
-
-  void-elements@3.1.0: {}
 
   which-boxed-primitive@1.1.1:
     dependencies:
@@ -4673,8 +4332,3 @@ snapshots:
   yallist@5.0.0: {}
 
   yocto-queue@0.1.0: {}
-
-  zustand@5.0.5(@types/react@19.1.6)(react@19.1.0):
-    optionalDependencies:
-      '@types/react': 19.1.6
-      react: 19.1.0

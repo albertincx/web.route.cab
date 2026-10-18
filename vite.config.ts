@@ -9,6 +9,16 @@ import ta from "@tailwindcss/vite";
 // @ts-ignore
 export default ({mode}) => defineConfig({
     plugins: [react(), ta()],
+    build: {
+        rollupOptions: {
+            // @ts-ignore
+            input: path.resolve(__dirname, 'dev.html'),
+        },
+    },
+    // 2. Для разработки (vite dev): открывать сразу dev.html
+    server: {
+        open: '/dev.html',
+    },
     resolve: {
         alias: {
             // @ts-ignore

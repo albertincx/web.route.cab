@@ -3,14 +3,12 @@ import {GoogleLogin} from "@react-oauth/google";
 
 import keyStorage from "../utils/storage";
 import {LatLng} from "../utils/types";
-import {usePStore} from "../store/store";
 import {RouteDetailsModal} from "./Modal";
 
 // Main App Component
 function Modals() {
     const [showModal, setShowModal] = useState(false);
     // @ts-ignore
-    const modal = usePStore(state => state.modal);
     console.log('aaa')
     console.log('aaa')
     console.log('aaa')
@@ -60,18 +58,8 @@ function Modals() {
         // setGu(res.user);
         keyStorage.sSetJ("user", res.user);
         localStorage.setItem("token", res.token);
-        usePStore.getState().update('modal', null);
-        usePStore.getState().update('tick', new Date());
         // alert("Logged in!");
     };
-    console.log('modal')
-    console.log('modal')
-    console.log('modal')
-    console.log(modal)
-
-    if (!modal) {
-        return null;
-    }
 
     return (
         <RouteDetailsModal
