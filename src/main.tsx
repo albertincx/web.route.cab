@@ -1,5 +1,5 @@
-import {createRoot} from "react-dom/client";
-import {GoogleOAuthProvider} from "@react-oauth/google";
+import { createRoot } from "react-dom/client";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import App from "./App";
 import React from "react";
@@ -8,12 +8,12 @@ class ErrorBoundary extends React.Component {
     // @ts-ignore
     constructor(props) {
         super(props);
-        this.state = {hasError: false, error: null};
+        this.state = { hasError: false, error: null };
     }
 
     // @ts-ignore
     static getDerivedStateFromError(error) {
-        return {hasError: true, error};
+        return { hasError: true, error };
     }
 
     // @ts-ignore
@@ -39,13 +39,13 @@ const rootElement = document.getElementById("root");
 if (!rootElement) {
     throw new Error("Failed to find root element");
 }
-let gc = '656103703545-c4hm6t31mcm9hl46b4k7ku06ur55k28t.apps.googleusercontent.com';
+let gc = '869371813430-j2sjln4m48huv97bfuttp7iira10usph.apps.googleusercontent.com';
 // gc = '656103703545-3k2kea50tnedb76884m4m18v4lpv7m44.apps.googleusercontent.com';
 createRoot(rootElement).render(<>
     <>
         <GoogleOAuthProvider clientId={gc}>
             <ErrorBoundary>
-                <App/>
+                <App />
             </ErrorBoundary>
         </GoogleOAuthProvider>
     </>
