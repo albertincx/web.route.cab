@@ -1,0 +1,82 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile || pnpm install
+
+      - name: Build Vite App
+        run: pnpm run build
+
+      - name: Assemble GitHub Pages site directory
+        run: |
+          mkdir -p _site
+          cp -r index.html app.js CNAME .nojekyll favicon.ico policy.html terms.html vendor _config.yml _site/ 2>/dev/null || true
+          cp -r dist _site/dist
+          echo "web.route.cab" > _site/CNAME
+          touch _site/.nojekyll
+
+      - name: Deploy to gh-pages branch (Branch deployment mode)
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          cname: web.route.cab
+          enable_jekyll: false
+
+      - name: Setup Pages (GitHub Actions mode)
+        uses: actions/configure-pages@v5
+        continue-on-error: true
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        continue-on-error: true
+        with:
+          path: './_site'
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

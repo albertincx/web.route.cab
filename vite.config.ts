@@ -7,8 +7,24 @@ import ta from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 // @ts-ignore
-export default ({mode}) => defineConfig({
-    plugins: [react(), ta()],
+export default ({mode}: any) => defineConfig({
+    base: mode === 'production' ? '/dist/' : '/',
+    plugins: [
+        react(),
+        ta(),
+        {
+            name: 'html-dev-to-index',
+            enforce: 'post',
+            generateBundle(_, bundle) {
+                if (bundle['dev.html']) {
+                    bundle['index.html'] = {
+                        ...bundle['dev.html'],
+                        fileName: 'index.html',
+                    };
+                }
+            },
+        },
+    ],
     build: {
         rollupOptions: {
             // @ts-ignore
